@@ -39,7 +39,7 @@ public class T16000M {
         return new JoystickButton(joy,3 );
     }
 
-    public JoystickButton getright() {
+    public JoystickButton getRight() {
         return new JoystickButton(joy, 4);
     }
 

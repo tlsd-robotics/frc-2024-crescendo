@@ -97,7 +97,8 @@ public class RobotContainer
 
     joy.getTrigger().onTrue((new InstantCommand(drivebase::zeroGyro)));
     joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
+    // joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
+    joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

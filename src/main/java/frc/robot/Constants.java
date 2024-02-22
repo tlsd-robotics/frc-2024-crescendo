@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycle;
 import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
 
@@ -49,4 +50,19 @@ public final class Constants
     public static final double Z_DEADBAND = 0.01;
     public static final double TURN_CONSTANT    = 6;
   }
+  
+public static final class Arm
+{
+  public static final double ENCODER_OFFSET = 0.0;
+  public static final int LEADER_ID = 0;
+  public static final int FOLLOWER_ID = 0;
+public static final DutyCycle ENCODER_ID = null;
+public static final int MODULE_ID = 0;
+public static final int FORWARD_CHANNEL = 0;
+public static final int REVERSE_CHANNEL = 0;
+public static final int EXTENSIONSWITCH = 0;
+public static final int ROTATIONSWITCH = 0;
+  
+}
+
 }
