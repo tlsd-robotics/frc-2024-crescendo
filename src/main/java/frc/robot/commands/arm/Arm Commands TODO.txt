@@ -1,0 +1,11 @@
+Required Commands:
+
+- ArmDefaultArmCommand(BooleanSupplier up, BooleanSupplier down) - Runs during manual control, Configures Setpoint Based on Button Press.
+
+ArmSetAngle(double angle) - Commands Arm to Angle Setpoint
+
+ArmSetExtension(boolean extended) - Commands Arm to Extension Setpoint
+
+ArmToSetpoint(?????) - Generates and executes a command group to move the arm to the given setpoint.
+
+ArmSetEnabled

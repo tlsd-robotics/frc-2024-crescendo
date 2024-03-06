@@ -4,33 +4,57 @@
 
 package frc.robot.commands.arm;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import TLsdLibrary.Controllers.LogitechF310;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class DefaultArmCommand extends Command {
   /** Creates a new DefaultArmCommand. */
-  ArmSubsystem arm;
-  LogitechF310 joy;
-  PIDController pid;
-  public DefaultArmCommand(ArmSubsystem arm, LogitechF310 joy) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.arm = arm;
-    this.joy = joy;
 
+  DoubleSupplier rotationInput;
+  BooleanSupplier extend;
+  BooleanSupplier retract;
+
+  ArmSubsystem arm;
+
+  Timer timer = new Timer();
+
+  public DefaultArmCommand(DoubleSupplier rotationInput, BooleanSupplier extend, BooleanSupplier retract,  ArmSubsystem arm) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    
+    this.rotationInput = rotationInput;
+    this.extend = extend;
+    this.retract = retract;
+    this.arm = arm;
+    
     addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    arm.setAngle(arm.getAngleSetpoint() + rotationInput.getAsDouble() * Constants.Arm.MAX_MANUAL_ROTATION_RATE_DEGREES_SEC * timer.get());
+    timer.reset();
+
+    if(extend.getAsBoolean()) {
+        arm.setExtened(true);
+    }
+    else if(retract.getAsBoolean()) {
+        arm.setExtened(false);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

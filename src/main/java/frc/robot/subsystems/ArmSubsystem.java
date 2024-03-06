@@ -2,9 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/*
+ARM SUBYSTEM TODOs:
+ - Startup Saftey
+ -- Hold Position
+ -- Prevent Setpoint Changes when
+    Arm is in disabled state
+*/
+
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
+    
   /** Creates a new ArmSubsystem. */
     private CANSparkMax leader;
     private CANSparkMax follower;
@@ -24,14 +34,17 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput extensionSwitch;
     private DigitalInput rotationSwitch;
     private PIDController pid;
-    private double setPoint;
+    private double setpoint;
     private boolean enabled;
+    private boolean extended;
+    private boolean targetExtensionChanged;
   public ArmSubsystem() {
     enabled = false;
     leader = new CANSparkMax(Constants.Arm.LEADER_ID, MotorType.kBrushless);
     follower = new CANSparkMax(Constants.Arm.FOLLOWER_ID, MotorType.kBrushless);
     follower.follow(leader);
-
+    leader.setIdleMode(IdleMode.kBrake);
+    follower.setIdleMode(IdleMode.kBrake);
     encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_ID);
     encoder.setDistancePerRotation(360);
 
@@ -50,24 +63,70 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getAngleSetpoint() {
-    return setPoint;
+    return setpoint;
   }
+
   public void setAngle(double angle) {
 
-    setPoint = angle;
+    double currentAngle = getEncoderAngle();
+    boolean isExtended = getExtended();
+
+    if(currentAngle < Constants.Arm.MAX_ANGLE_DEGREES && 
+      ((isExtended ? (currentAngle > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
+                     (currentAngle > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)
+       )
+      )
+    ) {
+      setpoint = angle;
+    }
+
+
   }
-  public void setEnabled(boolean enabled){
-    this. enabled = enabled;
+  public void enableArm(){
+    this. enabled = true;
   }
-  public boolean getEnabled() {
+
+  public void disableArm(){
+    this. enabled = false;
+  }
+
+  public boolean getExtended() {
+    return extended;
+  }
+
+  public void setExtened(boolean extend) {
+    if (enabled) {
+      if(!extend){
+        if(setpoint > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES){
+          armExtender.set(DoubleSolenoid.Value.kReverse);
+        }
+      }
+      else {
+        armExtender.set(DoubleSolenoid.Value.kForward);
+      }
+      targetExtensionChanged = true;
+    }
+  }
+  
+  public boolean getEnabledStatus() {
     return enabled;
   }
+
   @Override
   public void periodic() {
     if (enabled) {
-      leader.set(pid.calculate(encoder.getDistance(), setPoint));
+      leader.set(pid.calculate(encoder.getDistance(), setpoint));
     }
-    
+    if (targetExtensionChanged) {
+      if ((armExtender.get() == DoubleSolenoid.Value.kForward) && extensionSwitch.get()) {
+        extended = true;
+        targetExtensionChanged = false;
+      }
+      else if (armExtender.get() == DoubleSolenoid.Value.kReverse) {
+        extended = false;
+        targetExtensionChanged = false;
+      }
+    }
 
   }
 }

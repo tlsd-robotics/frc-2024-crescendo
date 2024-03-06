@@ -56,13 +56,30 @@ public static final class Arm
   public static final double ENCODER_OFFSET = 0.0;
   public static final int LEADER_ID = 0;
   public static final int FOLLOWER_ID = 0;
-public static final DutyCycle ENCODER_ID = null;
-public static final int MODULE_ID = 0;
-public static final int FORWARD_CHANNEL = 0;
-public static final int REVERSE_CHANNEL = 0;
-public static final int EXTENSIONSWITCH = 0;
-public static final int ROTATIONSWITCH = 0;
-  
+  public static final DutyCycle ENCODER_ID = null;
+  public static final int MODULE_ID = 0;
+  public static final int FORWARD_CHANNEL = 0;
+  public static final int REVERSE_CHANNEL = 0;
+  public static final int EXTENSIONSWITCH = 0;
+  public static final int ROTATIONSWITCH = 0;
+
+  public static final double MAX_ANGLE_DEGREES = 180;
+  public static final double MIN_ANGLE_RETRACTED_DEGREES = 15;
+  public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
+  public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
+}
+public static final class Setpoint{
+  public static final double HOME = 15;
+  public static final double INTAKE = 0; 
+}
+public static final class Shooter
+{
+  public static final int SHOOTER_ID = 0;
+}
+public static final class Intake{
+  public static final int LEADER_ID = 0;
+  public static final int FOLLOWER_ID = 0;
 }
 
 }
+
