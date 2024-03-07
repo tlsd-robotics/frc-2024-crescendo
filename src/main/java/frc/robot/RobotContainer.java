@@ -17,8 +17,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.vision.LiningUp;
+import frc.robot.subsystems.IntakeSubsytem;
+import frc.robot.subsystems.ShooterSubsytem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import TLsdLibrary.Controllers.*;
@@ -33,6 +36,8 @@ public class RobotContainer
 
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+  private final IntakeSubsytem intake = new IntakeSubsytem();
+  private final ShooterSubsytem shooter = new ShooterSubsytem();
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   T16000M joy = new T16000M(0);
@@ -97,7 +102,9 @@ public class RobotContainer
 
     joy.getTrigger().onTrue((new InstantCommand(drivebase::zeroGyro)));
     joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
+    // joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
+    joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
+    joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
