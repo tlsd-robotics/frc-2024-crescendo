@@ -5,32 +5,55 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command; 
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.IntakeSubsytem;
+import frc.robot.subsystems.ShooterSubsytem; 
 
 public class ShooterOn extends Command {
   /** Creates a new ShooterOn. */
   private Timer ShootTimer = new Timer();
-  private double intakePower = .5;
-  private double shootPower = .6;
+  private IntakeSubsytem intake; 
+  private ShooterSubsytem shooter;
+  private double intakePower;
+  private double shooterPower;
   private double value; 
   
   
-  public ShooterOn() {
+  public ShooterOn(IntakeSubsytem intake, ShooterSubsytem shooter, double intakePower, double shooterPower) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    this.intake = intake; 
+    this.shooter = shooter; 
+    this.intakePower = intakePower;
+    this.shooterPower = shooterPower;
+    addRequirements(intake, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    ShootTimer.reset();
+    ShootTimer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    value = ShootTimer.get();
+    if (value < .5) {
+      shooter.spin(shooterPower);
+    }
+    else {
+      intake.spin(intakePower);
+      shooter.spin(shooterPower);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.spin(0.0);
+    shooter.spin(0.0);
+  }
 
   // Returns true when the command should end.
   @Override

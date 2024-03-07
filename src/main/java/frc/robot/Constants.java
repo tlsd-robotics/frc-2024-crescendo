@@ -72,13 +72,13 @@ public static final class Setpoint{
   public static final double HOME = 15;
   public static final double INTAKE = 0; 
 }
-public static final class Shooter
+public static final class Shooter 
 {
-  public static final int SHOOTER_ID = 0;
+  public static final int SHOOTER_ID = 50;
 }
-public static final class Intake{
-  public static final int LEADER_ID = 0;
-  public static final int FOLLOWER_ID = 0;
+public static final class Intake {
+  public static final int LEADER_ID = 51;
+  public static final int FOLLOWER_ID = 52;
 }
 
 }
