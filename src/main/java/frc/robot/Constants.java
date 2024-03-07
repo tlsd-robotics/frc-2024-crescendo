@@ -67,6 +67,8 @@ public static final class Arm
   public static final double MIN_ANGLE_RETRACTED_DEGREES = 15;
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
+
+  public static final double ANGLUAR_CHANGE_RETRACTION_THRESHOLD_DEGREES = 30;
 }
 public static final class Setpoint{
   public static final double HOME = 15;

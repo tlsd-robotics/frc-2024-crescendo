@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -132,5 +133,33 @@ public class ArmSubsystem extends SubsystemBase {
       }
     }
 
+  }
+
+
+  public static class Setpoint {
+    double angleDegrees;
+    boolean extended;
+
+    Setpoint(double angleDegrees, boolean extended) {
+      this.angleDegrees = angleDegrees;
+      this.extended = extended; 
+    }
+  } 
+  
+
+
+  SequentialCommandGroup GetArmToSetpointCommand(Setpoint setpoint) {
+    SequentialCommandGroup command = new SequentialCommandGroup();
+
+    if (setpoint.angleDegrees < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES) {
+      if (setpoint.extended && setpoint.angleDegrees > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) {
+        
+      }
+    }
+    else {
+
+    }
+
+    return command;
   }
 }
