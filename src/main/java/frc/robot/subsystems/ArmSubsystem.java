@@ -112,6 +112,10 @@ public class ArmSubsystem extends SubsystemBase {
     return enabled;
   }
 
+  public boolean armAtSetpoint() {
+    return pid.atSetpoint();
+  }
+
   @Override
   public void periodic() {
     if (enabled) {

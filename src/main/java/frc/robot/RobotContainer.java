@@ -20,9 +20,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.vision.LiningUp;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsytem;
 import frc.robot.subsystems.ShooterSubsytem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.commands.arm.*;
 import java.io.File;
 import TLsdLibrary.Controllers.*;
 
@@ -38,9 +40,11 @@ public class RobotContainer
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
   private final IntakeSubsytem intake = new IntakeSubsytem();
   private final ShooterSubsytem shooter = new ShooterSubsytem();
+  private final ArmSubsystem arm = new ArmSubsystem();
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   T16000M joy = new T16000M(0);
+  LogitechF310 controller = new LogitechF310(1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -87,6 +91,8 @@ public class RobotContainer
 
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
+
+    arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
   }
 
   /**

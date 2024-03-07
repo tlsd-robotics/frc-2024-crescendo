@@ -14,15 +14,18 @@ public class ArmToAngle extends Command {
     ArmSubsystem arm;   
     double angle;
 
-    public ArmToAngle(double angle) {
+
+    public ArmToAngle(double angle, ArmSubsystem arm) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.angle = angle;
+        this.arm = arm;
         addRequirements(arm);
     }   
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-    
+      arm.setAngle(angle);
+
     }   
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -34,6 +37,6 @@ public class ArmToAngle extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return false;
+      return arm.armAtSetpoint();
     }
 }

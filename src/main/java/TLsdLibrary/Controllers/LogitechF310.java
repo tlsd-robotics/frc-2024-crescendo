@@ -44,20 +44,20 @@ public class LogitechF310  {
 //==============================================================================
 //============================ Create Buttons ==================================
 
-    JoystickButton buttonA = new JoystickButton(joy, btnA);
-    JoystickButton buttonB = new JoystickButton(joy, btnB);
-    JoystickButton buttonX = new JoystickButton(joy, btnX);
-    JoystickButton buttonY = new JoystickButton(joy, btnY);
-    JoystickButton buttonL1 = new JoystickButton(joy, btnL1);
-    JoystickButton buttonR1 = new JoystickButton(joy, btnR1);
-    JoystickButton buttonSelect = new JoystickButton(joy, btnSelect);
-    JoystickButton buttonR3 = new JoystickButton(joy, btnR3);
-    JoystickButton buttonL3 = new JoystickButton(joy, btnL3);
+    public JoystickButton buttonA = new JoystickButton(joy, btnA);
+    public JoystickButton buttonB = new JoystickButton(joy, btnB);
+    public JoystickButton buttonX = new JoystickButton(joy, btnX);
+    public JoystickButton buttonY = new JoystickButton(joy, btnY);
+    public JoystickButton buttonL1 = new JoystickButton(joy, btnL1);
+    public JoystickButton buttonR1 = new JoystickButton(joy, btnR1);
+    public JoystickButton buttonSelect = new JoystickButton(joy, btnSelect);
+    public JoystickButton buttonR3 = new JoystickButton(joy, btnR3);
+    public JoystickButton buttonL3 = new JoystickButton(joy, btnL3);
 
-    POVButton dPadUp = new POVButton(joy, 0);
-    POVButton dPadRight = new POVButton(joy, 90);
-    POVButton dPadDown = new POVButton(joy, 180);
-    POVButton dPadLeft = new POVButton(joy, 270);
+    public POVButton dPadUp = new POVButton(joy, 0);
+    public POVButton dPadRight = new POVButton(joy, 90);
+    public POVButton dPadDown = new POVButton(joy, 180);
+    public POVButton dPadLeft = new POVButton(joy, 270);
 
 //==============================================================================
 //================================ Getters =====================================
