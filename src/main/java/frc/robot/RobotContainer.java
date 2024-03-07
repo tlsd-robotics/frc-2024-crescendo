@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.vision.LiningUp;
@@ -110,7 +111,8 @@ public class RobotContainer
     joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
     // joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
-    joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
+    // joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
+    joy.getBottom().whileTrue(new ShooterOn(intake, shooter, 0.5, 0.5));  
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

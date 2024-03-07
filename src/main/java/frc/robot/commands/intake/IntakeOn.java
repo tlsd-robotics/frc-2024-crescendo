@@ -48,6 +48,13 @@ public class IntakeOn extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (distance >=250);
+   
+    if (speed >= 0){ 
+      return (distance >=250);
+    } else {
+      return false;
+    }
+
   }
+
 }
