@@ -26,7 +26,7 @@ public class IntakeSubsytem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void spin(double speed) {
-    leader.set(speed);
+    leader.set(speed); //TODO: Possible error? IIRC WPILIB Requires motors to be continuously updated for saftey.
   }
   public ColorSensorV3 getSensor() {
     return sensor;

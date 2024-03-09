@@ -50,7 +50,7 @@ public class IntakeOn extends Command {
   public boolean isFinished() {
    
     if (speed >= 0){ 
-      return (distance >=250);
+      return (distance >=250); //TODO: Move detection threshold to constants file
     } else {
       return false;
     }

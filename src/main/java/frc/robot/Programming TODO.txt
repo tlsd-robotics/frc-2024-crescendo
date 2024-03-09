@@ -1,0 +1,35 @@
+HIGH PRIORITY:
+
+- Manual Control
+-- [X] Startup Arm Safties (Change setpoint to current position on enabling robot to prevent the bot from developing an appetite for fingers.)
+-- [ ] Subsystem and Commands for climber
+-- [ ] Shooter RPM PID Control
+-- [ ] Intake RPM PID Control
+
+- Arm Setpoints
+-- [*] Setpoint path generation
+-- [ ] Add time delay for arm retraction, or support for arm retraction limit switch?
+
+MODERATE PRIORITY:
+
+- Autonomous
+-- [ ]Path Planner
+
+- Photon Vision
+-- [ ] Update Vision libs
+-- [ ] Build Vision Commands
+
+- Automatic Cycles / Target Tracking
+-- [ ] Intake
+--- [ ] Automatically Intake to position and index
+---- [ ] Detect Ring Position using color sensor proximity
+---- [ ] OR add a second color sensor for indexing
+-- [ ] Speaker
+-- [ ] Amp
+-- [ ] Integrate setpoints with automatic cycles (Now Called functionalSetpoints) (e.g. spin up shooter wheels automatically while going to shoot setpoint)
+
+LOW PRIORITY:
+
+- [ ] Update readme (is currently copied from yagsl)
+- [ ] Dynamically planned autonomous (sendable choosers? network tables?)
+

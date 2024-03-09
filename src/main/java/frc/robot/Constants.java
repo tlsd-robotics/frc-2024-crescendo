@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.Setpoint;
 import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
 
@@ -68,19 +70,30 @@ public static final class Arm
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
 
-  public static final double ANGLUAR_CHANGE_RETRACTION_THRESHOLD_DEGREES = 30;
+  public static final double ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES = 30;
+  public static final double RETRACTED_ANGLULAR_LIMIT_SAFETY_DEGREES = 5; //Amount above min retracted angle arm must extend before traveling to angles below during arm setpoint paths.
 }
-public static final class Setpoint{
-  public static final double HOME = 15;
-  public static final double INTAKE = 0; 
+
+public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
+  public static final ArmSubsystem.Setpoint HOME    = new Setpoint(15, false);
+  public static final ArmSubsystem.Setpoint INTAKE  = new Setpoint(0, true);
+  public static final ArmSubsystem.Setpoint SPEAKER = new Setpoint(0, true);
+  public static final ArmSubsystem.Setpoint AMP     = new Setpoint(85, true);
 }
+
 public static final class Shooter 
 {
   public static final int SHOOTER_ID = 50;
+
+  public static final double DEFAULT_SPEED = 1;
 }
-public static final class Intake {
+
+public static final class Intake 
+{
   public static final int LEADER_ID = 51;
   public static final int FOLLOWER_ID = 52;
+
+  public static final double DEFAULT_SPEED = 0.25;
 }
 
 }

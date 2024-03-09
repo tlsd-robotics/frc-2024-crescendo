@@ -137,4 +137,19 @@ public class RobotContainer
   {
     drivebase.setMotorBrake(brake);
   }
+
+  //called when robot enters teleop
+  public void onTeleop() {
+    arm.enableArm();
+  }
+
+  //called when robot enters autonomous
+  public void onAutonomous() {
+    arm.enableArm();
+  }
+
+  //called when robot is disabled
+  public void onDisable() {
+    arm.disableArm();
+  }
 }
