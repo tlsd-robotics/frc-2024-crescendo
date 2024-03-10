@@ -85,7 +85,9 @@ public static final class Shooter
 {
   public static final int SHOOTER_ID = 50;
 
-  public static final double DEFAULT_SPEED = 1;
+  public static final double WHEEL_DIAMETER_INCHES = 4;
+  public static final double DEFAULT_SHOOT_SPEED = 1;
+  public static final double DEFAULT_INTAKE_SPEED = 0.1;
 }
 
 public static final class Intake 
@@ -93,6 +95,7 @@ public static final class Intake
   public static final int LEADER_ID = 51;
   public static final int FOLLOWER_ID = 52;
 
+  public static final double WHEEL_DIAMETER_INCHES = 2;
   public static final double DEFAULT_SPEED = 0.25;
 }
 

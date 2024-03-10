@@ -39,7 +39,7 @@ public class ShooterOn extends Command {
   @Override
   public void execute() {
     value = ShootTimer.get();
-    if (value < .5) {
+    if (value < .5) { //TODO: Transition to rpm based PID control rather than inconsistent timer based system
       shooter.spin(shooterPower);
     }
     else {
@@ -58,6 +58,6 @@ public class ShooterOn extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return false; //TODO: Detect when completed
   }
 }

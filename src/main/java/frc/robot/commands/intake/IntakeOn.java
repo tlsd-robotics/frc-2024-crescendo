@@ -8,6 +8,7 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsytem;
 
 public class IntakeOn extends Command {
@@ -22,6 +23,13 @@ public class IntakeOn extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.speed = d;
+    addRequirements(intake);
+  }
+
+  public IntakeOn(IntakeSubsytem intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.intake = intake;
+    this.speed = Constants.Intake.DEFAULT_SPEED;
     addRequirements(intake);
   }
 

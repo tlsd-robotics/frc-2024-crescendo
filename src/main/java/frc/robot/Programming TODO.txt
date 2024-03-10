@@ -21,15 +21,17 @@ MODERATE PRIORITY:
 
 - Automatic Cycles / Target Tracking
 -- [ ] Intake
---- [ ] Automatically Intake to position and index
+--- [*] Automatically Intake to position and index
 ---- [ ] Detect Ring Position using color sensor proximity
 ---- [ ] OR add a second color sensor for indexing
 -- [ ] Speaker
 -- [ ] Amp
--- [ ] Integrate setpoints with automatic cycles (Now Called functionalSetpoints) (e.g. spin up shooter wheels automatically while going to shoot setpoint)
+-- [*] Integrate setpoints with automatic cycles (Now Called functionalSetpoints) (e.g. spin up shooter wheels automatically while going to shoot setpoint)
 
 LOW PRIORITY:
 
 - [ ] Update readme (is currently copied from yagsl)
 - [ ] Dynamically planned autonomous (sendable choosers? network tables?)
+
+- [ ] Rate based dynamic arm control (could allow for faster movements)?
 

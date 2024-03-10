@@ -6,37 +6,36 @@ package frc.robot.commands.functionalSetpoints;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsytem;
+import frc.robot.subsystems.ShooterSubsytem;
 
-
-//Moves arm to intake setpoint, and performs intake cycle.
-
-public class IntakeFunction extends Command {
-
-  /** Creates a new IntakeFunction. */
-
-  ArmSubsystem arm;
+public class AmpFunction extends Command {
+  ShooterSubsytem shooter;
   IntakeSubsytem intake;
-
-  public IntakeFunction(ArmSubsystem arm, IntakeSubsytem intake) {
-    this.arm = arm;
+  ArmSubsystem arm;
+  /** Creates a new ShootFunction. */
+  public AmpFunction(ShooterSubsytem shooter, IntakeSubsytem intake, ArmSubsystem arm) {
+    this.shooter = shooter;
     this.intake = intake;
-    addRequirements(arm);
+    this.arm = arm;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake, shooter, arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SequentialCommandGroup intakeFunctionCommands = new SequentialCommandGroup();
-    intakeFunctionCommands.addCommands(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
-    intakeFunctionCommands.addCommands(new IntakeOn(intake));
+    SequentialCommandGroup ampFunctionCommands = new SequentialCommandGroup();
+    ampFunctionCommands.addCommands(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
+    ampFunctionCommands.addCommands(new IntakeOn(intake));
+    ampFunctionCommands.addCommands(new ShooterOn(intake, shooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED));
 
-    CommandScheduler.getInstance().schedule(intakeFunctionCommands);
+    CommandScheduler.getInstance().schedule(ampFunctionCommands);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,6 +49,6 @@ public class IntakeFunction extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
