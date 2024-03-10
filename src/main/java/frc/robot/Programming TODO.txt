@@ -5,15 +5,20 @@ HIGH PRIORITY:
 -- [ ] Subsystem and Commands for climber
 -- [ ] Shooter RPM PID Control
 -- [ ] Intake RPM PID Control
+-- [ ] Intake/Shooter Default command
 
 - Arm Setpoints
 -- [*] Setpoint path generation
 -- [ ] Add time delay for arm retraction, or support for arm retraction limit switch?
 
+- [ ] Axis Boolean Supplier Class
+-- [ ] Multiple Thresholds per Axis?
+
 MODERATE PRIORITY:
 
 - Autonomous
--- [ ]Path Planner
+-- [ ] Path Planner
+-- [ ] Vision Based Autonomous Intake/Shoot Commands
 
 - Photon Vision
 -- [ ] Update Vision libs

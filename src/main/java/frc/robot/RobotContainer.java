@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -27,6 +29,10 @@ import frc.robot.subsystems.ShooterSubsytem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.arm.*;
 import java.io.File;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import TLsdLibrary.Controllers.*;
 
 /**
@@ -47,6 +53,9 @@ public class RobotContainer
   T16000M joy = new T16000M(0);
   LogitechF310 controller = new LogitechF310(1);
 
+
+  SendableChooser<Command> autoChooser;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -54,6 +63,7 @@ public class RobotContainer
   {
     // Configure the trigger bindings
     configureBindings();
+    configureAutoCommands();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
                                                                    () -> MathUtil.applyDeadband(joy.getRawY(), OperatorConstants.Y_DEADBAND),
@@ -94,6 +104,12 @@ public class RobotContainer
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
 
     arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
+
+    //Creates a sendable chooser using all autos paths in roborio delploy folder. See:
+    // https://pathplanner.dev/pplib-build-an-auto.html#create-a-sendablechooser-with-all-autos-in-project
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Autonomous Chooser", autoChooser);
+
   }
 
   /**
@@ -116,6 +132,11 @@ public class RobotContainer
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
+  private void configureAutoCommands() {
+    //Register commands for use in autonomous as follows:
+    //NamedCommands.addCommands("Name in Pathplanner", command);
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -125,7 +146,8 @@ public class RobotContainer
   {
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("New Path", true);
-    return drivebase.getAutonomousCommand("New Path", true);
+    //return drivebase.getAutonomousCommand("New Path", true);
+    return autoChooser.getSelected();
   }
 
   public void setDriveMode()
