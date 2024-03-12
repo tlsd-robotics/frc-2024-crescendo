@@ -58,7 +58,7 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(-0.01, 0, 0);
+    pid = new PIDController(0.01, 0, 0);
     pid.setTolerance(0.25);
     setAngle(getEncoderAngle());
   }
