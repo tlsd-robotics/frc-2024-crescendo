@@ -50,6 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
     follower.follow(leader);
     leader.setIdleMode(IdleMode.kBrake);
     follower.setIdleMode(IdleMode.kBrake);
+    leader.setInverted(true);
+    follower.setInverted(true);
     encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_ID);
     encoder.setDistancePerRotation(360);
 
