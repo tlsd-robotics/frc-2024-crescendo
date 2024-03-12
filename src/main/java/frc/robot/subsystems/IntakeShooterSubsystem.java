@@ -26,11 +26,14 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     shooterLeader = new CANSparkMax(Constants.Shooter.SHOOTER_LEADER_ID, MotorType.kBrushless);
     shooterFollower = new CANSparkMax(Constants.Shooter.SHOOTER_FOLLOWER_ID, MotorType.kBrushless);
     shooterLeader.setInverted(false);
-    shooterFollower.setInverted(true);
+    shooterFollower.setInverted(false);
 
     intakeLeader = new CANSparkMax(Constants.Intake.LEADER_ID, MotorType.kBrushless);
     intakeFollower = new CANSparkMax(Constants.Intake.FOLLOWER_ID, MotorType.kBrushless);
     intakeFollower.follow(intakeLeader);
+    intakeLeader.setInverted(false);
+    intakeFollower.setInverted(false);
+
     sensor = new ColorSensorV3(I2C.Port.kOnboard);
   }
 

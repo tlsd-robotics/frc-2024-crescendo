@@ -2,46 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeShooterSubsystem;
-
-public class IntakeDefaultCommand extends Command {
-
-  DoubleSupplier axis;
-  IntakeShooterSubsystem intakeShooter;
+import frc.robot.subsystems.ClimberSubsystem;
 
 
-  /** Creates a new ShooterIntakeDefaultCommand. */
-  public IntakeDefaultCommand(DoubleSupplier axis, IntakeShooterSubsystem intakeShooter) {
-    this.axis = axis;
-    this.intakeShooter = intakeShooter;
-    
+public class ClimberSet extends Command {
+  boolean extended;
+  ClimberSubsystem climber;
+
+  /** Creates a new ArmSet. */
+  public ClimberSet(boolean extended, ClimberSubsystem climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+  this.extended = extended;
+  this.climber = climber;
+  addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    climber.setExetended(extended);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    intakeShooter.setIntakeSpeed(axis.getAsDouble());
-    intakeShooter.setShooterSpeed((1.0/8.0) * axis.getAsDouble());
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

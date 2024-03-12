@@ -56,12 +56,12 @@ public final class Constants
 public static final class Arm
 {
   public static final double ENCODER_OFFSET = 0.0;
-  public static final int LEADER_ID = 0;
-  public static final int FOLLOWER_ID = 0;
+  public static final int LEADER_ID = 25;
+  public static final int FOLLOWER_ID = 22;
   public static final DutyCycle ENCODER_ID = null;
-  public static final int MODULE_ID = 0;
-  public static final int FORWARD_CHANNEL = 0;
-  public static final int REVERSE_CHANNEL = 0;
+  public static final int PNEUMATICS_MODULE_ID = 0;
+  public static final int FORWARD_CHANNEL = 3;
+  public static final int REVERSE_CHANNEL = 2;
   public static final int EXTENSIONSWITCH = 0;
   public static final int ROTATIONSWITCH = 0;
 
@@ -83,8 +83,8 @@ public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLA
 
 public static final class Shooter 
 {
-  public static final int SHOOTER_LEADER_ID = 50;
-  public static final int SHOOTER_FOLLOWER_ID = 51;
+  public static final int SHOOTER_LEADER_ID = 24;
+  public static final int SHOOTER_FOLLOWER_ID = 17;
 
   public static final double WHEEL_DIAMETER_INCHES = 4;
   public static final double DEFAULT_SHOOT_SPEED = 1;
@@ -93,11 +93,17 @@ public static final class Shooter
 
 public static final class Intake 
 {
-  public static final int LEADER_ID = 51;
-  public static final int FOLLOWER_ID = 52;
+  public static final int LEADER_ID = 16;
+  public static final int FOLLOWER_ID = 23;
 
   public static final double WHEEL_DIAMETER_INCHES = 2;
   public static final double DEFAULT_SPEED = 0.25;
+}
+
+public static final class Climber 
+{
+  public static final int FORWARD_CHANNEL = 1;
+  public static final int REVERSE_CHANNEL = 0;
 }
 
 }

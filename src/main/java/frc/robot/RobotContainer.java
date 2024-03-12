@@ -26,9 +26,12 @@ import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.vision.LiningUp;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.arm.*;
+import frc.robot.commands.climber.DefaultClimberCommand;
+
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -42,6 +45,9 @@ import TLsdLibrary.Controllers.*;
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
+
+ //The default positive direction for a neo is clockwise when viewed from the back of the motor.
+ 
 public class RobotContainer
 {
 
@@ -49,6 +55,7 @@ public class RobotContainer
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
   private final IntakeShooterSubsystem intakeShooter = new IntakeShooterSubsystem();
   private final ArmSubsystem arm = new ArmSubsystem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   T16000M joy = new T16000M(0);
@@ -106,6 +113,7 @@ public class RobotContainer
 
     arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0, true), controller.buttonB, controller.buttonX, arm));
     intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller::getLeftXAxis, intakeShooter));
+    climber.setDefaultCommand(new DefaultClimberCommand(controller.getButtonY(), controller.getButtonA(), climber));
 
     //Creates a sendable chooser using all autos paths in roborio delploy folder. See:
     // https://pathplanner.dev/pplib-build-an-auto.html#create-a-sendablechooser-with-all-autos-in-project

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -52,7 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
     encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_ID);
     encoder.setDistancePerRotation(360);
 
-    armExtender = new DoubleSolenoid(Constants.Arm.MODULE_ID, PneumaticsModuleType.REVPH, Constants.Arm.FORWARD_CHANNEL, Constants.Arm.REVERSE_CHANNEL);
+    armExtender = new DoubleSolenoid(Constants.Arm.PNEUMATICS_MODULE_ID, PneumaticsModuleType.REVPH, Constants.Arm.FORWARD_CHANNEL, Constants.Arm.REVERSE_CHANNEL);
 
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
@@ -141,6 +142,9 @@ public class ArmSubsystem extends SubsystemBase {
         extended = false;
       }
     }
+
+    SmartDashboard.putNumber("Arm Angle", getEncoderAngle());
+    SmartDashboard.putNumber("Arm Motor Internal Encoder Value", leader.getEncoder().getPosition());
 
   }
 
