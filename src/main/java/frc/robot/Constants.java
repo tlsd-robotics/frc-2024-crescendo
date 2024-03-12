@@ -105,6 +105,10 @@ public static final class Climber
   public static final int FORWARD_CHANNEL = 1;
   public static final int REVERSE_CHANNEL = 0;
 }
-
+public static final class Superstructure
+{
+  public static final int PH_CAN_ID = 2;
+  public static final int PDP_CAN_ID = 1;
+}
 }
 
