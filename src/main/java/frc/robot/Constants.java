@@ -55,7 +55,7 @@ public final class Constants
   
 public static final class Arm
 {
-  public static final double ENCODER_OFFSET = 0.0;
+  public static final double ENCODER_OFFSET = 41.8;
   public static final int LEADER_ID = 25;
   public static final int FOLLOWER_ID = 22;
   public static final int ENCODER_ID = 0;
