@@ -3,13 +3,10 @@ package TLsdLibrary.Controllers;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-public class T16000M {
-    Joystick joy;
-
+public class T16000M extends GenericController {
 
     public T16000M(int port) {
-        joy = new Joystick(port);
-
+        super(port);
     }
 
 

@@ -11,20 +11,18 @@ import frc.robot.Constants;
 import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsytem;
-import frc.robot.subsystems.ShooterSubsytem;
+import frc.robot.subsystems.IntakeShooterSubsystem;
+
 
 public class AmpFunction extends Command {
-  ShooterSubsytem shooter;
-  IntakeSubsytem intake;
+  IntakeShooterSubsystem intakeShooter;
   ArmSubsystem arm;
   /** Creates a new ShootFunction. */
-  public AmpFunction(ShooterSubsytem shooter, IntakeSubsytem intake, ArmSubsystem arm) {
-    this.shooter = shooter;
-    this.intake = intake;
+  public AmpFunction(IntakeShooterSubsystem intakeShooter, ArmSubsystem arm) {
+    this.intakeShooter = intakeShooter;
     this.arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake, shooter, arm);
+    addRequirements(intakeShooter, arm);
   }
 
   // Called when the command is initially scheduled.
@@ -32,8 +30,8 @@ public class AmpFunction extends Command {
   public void initialize() {
     SequentialCommandGroup ampFunctionCommands = new SequentialCommandGroup();
     ampFunctionCommands.addCommands(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
-    ampFunctionCommands.addCommands(new IntakeOn(intake));
-    ampFunctionCommands.addCommands(new ShooterOn(intake, shooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED));
+    ampFunctionCommands.addCommands(new IntakeOn(intakeShooter));
+    ampFunctionCommands.addCommands(new ShooterOn(intakeShooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED));
 
     CommandScheduler.getInstance().schedule(ampFunctionCommands);
   }

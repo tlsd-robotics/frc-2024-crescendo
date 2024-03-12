@@ -5,7 +5,7 @@ HIGH PRIORITY:
 -- [ ] Subsystem and Commands for climber
 -- [ ] Shooter RPM PID Control
 -- [ ] Intake RPM PID Control
--- [ ] Intake/Shooter Default command
+-- [X] Intake/Shooter Default command
 
 - Arm Setpoints
 -- [*] Setpoint path generation
@@ -17,6 +17,9 @@ HIGH PRIORITY:
 MODERATE PRIORITY:
 
 - Autonomous
+
+-[ ] Fix Axis Supplier Deadzones
+
 -- [*] Path Planner
 -- [ ] Vision Based Autonomous Intake/Shoot Commands
 --- [ ] Intake

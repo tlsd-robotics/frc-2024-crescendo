@@ -9,24 +9,24 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSubsytem;
+import frc.robot.subsystems.IntakeShooterSubsystem;
 
 public class IntakeOn extends Command {
   private double distance;
-  private IntakeSubsytem intake;
+  private IntakeShooterSubsystem intake;
   private double speed;  
   private ColorSensorV3 sensor; 
   /** Creates a new IntakeOn. 
  * @param d 
  * @param intake */
-  public IntakeOn(IntakeSubsytem intake, double d) {
+  public IntakeOn(IntakeShooterSubsystem intake, double d) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.speed = d;
     addRequirements(intake);
   }
 
-  public IntakeOn(IntakeSubsytem intake) {
+  public IntakeOn(IntakeShooterSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.speed = Constants.Intake.DEFAULT_SPEED;
@@ -43,14 +43,14 @@ public class IntakeOn extends Command {
   @Override
   public void execute() {
     distance = sensor.getProximity();
-    intake.spin(speed);
+    intake.setIntakeSpeed(speed);
     SmartDashboard.putNumber("Proxomity", distance);
   }
   
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.spin(0.0);
+    intake.setIntakeSpeed(0.0);
   }
 
   // Returns true when the command should end.

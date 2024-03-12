@@ -73,15 +73,17 @@ public class ArmSubsystem extends SubsystemBase {
   public void setAngle(double angle) {
 
     double currentAngle = getEncoderAngle();
-    boolean isExtended = getExtended();
+    boolean isExtended = targetExtension;
 
-    if(currentAngle < Constants.Arm.MAX_ANGLE_DEGREES && 
-      ((isExtended ? (currentAngle > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
-                     (currentAngle > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)
-       )
-      )
-    ) {
-      setpoint = angle;
+    if (enabled) {
+      if(currentAngle < Constants.Arm.MAX_ANGLE_DEGREES && 
+        ((isExtended ? (currentAngle > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
+                       (currentAngle > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)
+         )
+        )
+      ) {
+        setpoint = angle;
+      }
     }
 
 
@@ -98,6 +100,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean getExtended() {
     return extended;
+  }
+
+  public boolean getTargetExtended() {
+    return targetExtension;
   }
 
   public void setExtened(boolean extend) {

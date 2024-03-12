@@ -83,7 +83,8 @@ public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLA
 
 public static final class Shooter 
 {
-  public static final int SHOOTER_ID = 50;
+  public static final int SHOOTER_LEADER_ID = 50;
+  public static final int SHOOTER_FOLLOWER_ID = 51;
 
   public static final double WHEEL_DIAMETER_INCHES = 4;
   public static final double DEFAULT_SHOOT_SPEED = 1;

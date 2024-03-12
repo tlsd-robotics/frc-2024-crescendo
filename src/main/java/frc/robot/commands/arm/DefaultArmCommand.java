@@ -45,8 +45,15 @@ public class DefaultArmCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setAngle(arm.getAngleSetpoint() + rotationInput.getAsDouble() * Constants.Arm.MAX_MANUAL_ROTATION_RATE_DEGREES_SEC * timer.get());
-    timer.reset();
+    double currentSetpoint = arm.getAngleSetpoint();
+
+    if (currentSetpoint > Constants.Arm.MAX_ANGLE_DEGREES || 
+    (arm.getTargetExtended() ? (currentSetpoint < Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
+    (currentSetpoint < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)))
+    {
+      arm.setAngle(arm.getAngleSetpoint() + rotationInput.getAsDouble() * Constants.Arm.MAX_MANUAL_ROTATION_RATE_DEGREES_SEC * timer.get());
+      timer.reset();
+    }
 
     if(extend.getAsBoolean()) {
         arm.setExtened(true);

@@ -7,9 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 /** 
  * <p>Creates a Logitech F310 specific {@link Joystick} including methods for every button and axis</p>
  */
-public class LogitechF310  {
-
-    private Joystick joy;
+public class LogitechF310 extends GenericController {
 
 //==============================================================================
 //=============================== Joystick IDs ===================================
@@ -23,12 +21,12 @@ public class LogitechF310  {
     private final int btnSelect = 8;       
     private final int btnR3 = 9;
     private final int btnL3 = 10;
-    private final int leftXAxis = 0;
-    private final int leftYAxis = 1;
-    private final int leftTrigger = 2;
-    private final int rightTrigger = 3;
-    private final int rightXAxis = 4;
-    private final int rightYAxis = 5;
+    public final int leftXAxis = 0;
+    public final int leftYAxis = 1;
+    public final int leftTrigger = 2;
+    public final int rightTrigger = 3;
+    public final int rightXAxis = 4;
+    public final int rightYAxis = 5;
 
 //==============================================================================
 //============================== Constructor ===================================
@@ -38,7 +36,7 @@ public class LogitechF310  {
      * @param port
      */
     public LogitechF310(int portID) {
-        this.joy = new Joystick(portID);
+        super(portID);
     }
 
 //==============================================================================
@@ -220,6 +218,5 @@ public class LogitechF310  {
     public double getRightTrigger() {
         return joy.getRawAxis(rightTrigger);
     }
-    
 
 }

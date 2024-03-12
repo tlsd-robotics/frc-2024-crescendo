@@ -6,12 +6,11 @@ package frc.robot.commands.functionalSetpoints;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsytem;
+import frc.robot.subsystems.IntakeShooterSubsystem;
 
 
 //Moves arm to intake setpoint, and performs intake cycle.
@@ -21,11 +20,11 @@ public class IntakeFunction extends Command {
   /** Creates a new IntakeFunction. */
 
   ArmSubsystem arm;
-  IntakeSubsytem intake;
+  IntakeShooterSubsystem intakeShooter;
 
-  public IntakeFunction(ArmSubsystem arm, IntakeSubsytem intake) {
+  public IntakeFunction(ArmSubsystem arm, IntakeShooterSubsystem intakeShooter) {
     this.arm = arm;
-    this.intake = intake;
+    this.intakeShooter = intakeShooter;
     addRequirements(arm);
   }
 
@@ -34,7 +33,7 @@ public class IntakeFunction extends Command {
   public void initialize() {
     SequentialCommandGroup intakeFunctionCommands = new SequentialCommandGroup();
     intakeFunctionCommands.addCommands(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
-    intakeFunctionCommands.addCommands(new IntakeOn(intake));
+    intakeFunctionCommands.addCommands(new IntakeOn(intakeShooter));
 
     CommandScheduler.getInstance().schedule(intakeFunctionCommands);
   }

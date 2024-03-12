@@ -6,28 +6,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsytem;
-import frc.robot.subsystems.ShooterSubsytem;
+import frc.robot.subsystems.IntakeShooterSubsystem;
+import frc.robot.subsystems.IntakeShooterSubsystem;
 
 public class HaltArmShooterIntake extends Command {
   /** Creates a new HaltArmShooterIntake. */
 
   ArmSubsystem arm;
-  IntakeSubsytem intake;
-  ShooterSubsytem shooter;
+  IntakeShooterSubsystem intakeShooter;
 
   //Will interrupt any executing arm/intake/shooter commands which are interruptable.
   //Stops Intake and Shooter wheels
-  public HaltArmShooterIntake(ArmSubsystem arm, IntakeSubsytem intake, ShooterSubsytem Shooter) {
+  public HaltArmShooterIntake(IntakeShooterSubsystem intakeShooter) {
+    this.intakeShooter = intakeShooter;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm, intake, shooter);
+    addRequirements(arm, intakeShooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.spin(0);  //Likley Redundant in most cases
-    shooter.spin(0); //
+    intakeShooter.setIntakeSpeed(0);  //Likley Redundant in most cases
   }
 
   // Called every time the scheduler runs while the command is scheduled.

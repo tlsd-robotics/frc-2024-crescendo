@@ -6,26 +6,23 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsytem;
-import frc.robot.subsystems.ShooterSubsytem; 
+import frc.robot.subsystems.IntakeShooterSubsystem;
 
 public class ShooterOn extends Command {
   /** Creates a new ShooterOn. */
   private Timer ShootTimer = new Timer();
-  private IntakeSubsytem intake; 
-  private ShooterSubsytem shooter;
+  private IntakeShooterSubsystem intakeShooter; 
   private double intakePower;
   private double shooterPower;
   private double value; 
   
   
-  public ShooterOn(IntakeSubsytem intake, ShooterSubsytem shooter, double intakePower, double shooterPower) {
+  public ShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake; 
-    this.shooter = shooter; 
+    this.intakeShooter = intakeShooter; 
     this.intakePower = intakePower;
     this.shooterPower = shooterPower;
-    addRequirements(intake, shooter);
+    addRequirements(intakeShooter);
   }
 
   // Called when the command is initially scheduled.
@@ -40,19 +37,19 @@ public class ShooterOn extends Command {
   public void execute() {
     value = ShootTimer.get();
     if (value < .5) { //TODO: Transition to rpm based PID control rather than inconsistent timer based system
-      shooter.spin(shooterPower);
+      intakeShooter.setShooterSpeed(intakePower);
     }
     else {
-      intake.spin(intakePower);
-      shooter.spin(shooterPower);
+      intakeShooter.setIntakeSpeed(intakePower);
+      intakeShooter.setShooterSpeed(shooterPower);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.spin(0.0);
-    shooter.spin(0.0);
+    intakeShooter.setShooterSpeed(0.0);
+
   }
 
   // Returns true when the command should end.
