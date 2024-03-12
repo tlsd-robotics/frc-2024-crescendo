@@ -53,7 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
     encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_ID);
     encoder.setDistancePerRotation(360);
 
-    armExtender = new DoubleSolenoid(Constants.Arm.PNEUMATICS_MODULE_ID, PneumaticsModuleType.REVPH, Constants.Arm.FORWARD_CHANNEL, Constants.Arm.REVERSE_CHANNEL);
+    armExtender = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.Arm.FORWARD_CHANNEL, Constants.Arm.REVERSE_CHANNEL);
 
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
