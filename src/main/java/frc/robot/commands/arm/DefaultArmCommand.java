@@ -11,6 +11,7 @@ import TLsdLibrary.Controllers.LogitechF310;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -45,15 +46,19 @@ public class DefaultArmCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentSetpoint = arm.getAngleSetpoint();
+    //double currentSetpoint = arm.getAngleSetpoint();
 
-    if (currentSetpoint > Constants.Arm.MAX_ANGLE_DEGREES || 
-    (arm.getTargetExtended() ? (currentSetpoint < Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
-    (currentSetpoint < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)))
-    {
+    //if (currentSetpoint > Constants.Arm.MAX_ANGLE_DEGREES || 
+    //(arm.getTargetExtended() ? (currentSetpoint < Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
+    //(currentSetpoint < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)))
+    //{
       arm.setAngle(arm.getAngleSetpoint() + rotationInput.getAsDouble() * Constants.Arm.MAX_MANUAL_ROTATION_RATE_DEGREES_SEC * timer.get());
+
+      SmartDashboard.putNumber("Arm Setpoint", arm.getAngleSetpoint());
+      SmartDashboard.putNumber("Arm Rotation Input", rotationInput.getAsDouble());
+
       timer.reset();
-    }
+    //}
 
     if(extend.getAsBoolean()) {
         arm.setExtened(true);

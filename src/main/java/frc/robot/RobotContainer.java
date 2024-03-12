@@ -111,7 +111,8 @@ public class RobotContainer
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
 
-    arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0, true), controller.buttonB, controller.buttonX, arm));
+    //arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0, true), controller.buttonB, controller.buttonX, arm));
+    arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
     intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller::getLeftXAxis, intakeShooter));
     climber.setDefaultCommand(new DefaultClimberCommand(controller.getButtonY(), controller.getButtonA(), climber));
 

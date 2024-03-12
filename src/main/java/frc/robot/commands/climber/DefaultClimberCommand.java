@@ -17,6 +17,7 @@ public class DefaultClimberCommand extends Command {
   public DefaultClimberCommand(BooleanSupplier extend, BooleanSupplier retract, ClimberSubsystem climber) {
     this.extend = extend;
     this.retract = retract;
+    this.climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
   }

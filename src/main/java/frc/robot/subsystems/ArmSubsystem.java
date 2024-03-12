@@ -40,9 +40,9 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput rotationSwitch;
     private PIDController pid;
     private double setpoint;
-    private boolean enabled;
-    private boolean extended;
-    private boolean targetExtension;
+    private boolean enabled = false;
+    private boolean extended = false;
+    private boolean targetExtension = false;
   public ArmSubsystem() {
     enabled = false;
     leader = new CANSparkMax(Constants.Arm.LEADER_ID, MotorType.kBrushless);
@@ -62,7 +62,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     pid = new PIDController(0.01, 0, 0);
     pid.setTolerance(0.25);
-    setAngle(getEncoderAngle());
   }
 
   public double getEncoderAngle() {
@@ -75,13 +74,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setAngle(double angle) {
 
-    double currentAngle = getEncoderAngle();
     boolean isExtended = targetExtension;
 
     if (enabled) {
-      if(currentAngle < Constants.Arm.MAX_ANGLE_DEGREES && 
-        ((isExtended ? (currentAngle > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
-                       (currentAngle > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)
+      if(angle < Constants.Arm.MAX_ANGLE_DEGREES && 
+        ((isExtended ? (angle > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
+                       (angle > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)
          )
         )
       ) {
@@ -134,7 +132,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (enabled) {
-      leader.set(pid.calculate(encoder.getDistance(), setpoint));
+      leader.set(pid.calculate(getEncoderAngle(), setpoint));
     }
     if (targetExtension != extended) {
       if (targetExtension == true && extensionSwitch.get()) {
