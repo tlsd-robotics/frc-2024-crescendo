@@ -28,6 +28,8 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
+  private Superstructure superstructure = new Superstructure();
+
   public Robot()
   {
     instance = this;
