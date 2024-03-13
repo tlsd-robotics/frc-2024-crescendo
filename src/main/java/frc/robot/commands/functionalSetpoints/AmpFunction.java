@@ -31,7 +31,7 @@ public class AmpFunction extends Command {
     SequentialCommandGroup ampFunctionCommands = new SequentialCommandGroup();
     ampFunctionCommands.addCommands(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
     ampFunctionCommands.addCommands(new IntakeOn(intakeShooter));
-    ampFunctionCommands.addCommands(new ShooterOn(intakeShooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED));
+    ampFunctionCommands.addCommands(new ShooterOn(intakeShooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_DELAY));
 
     CommandScheduler.getInstance().schedule(ampFunctionCommands);
   }
