@@ -38,6 +38,8 @@ MODERATE PRIORITY:
 -- [*] Speaker
 -- [*] Integrate setpoints with automatic cycles (Now Called functionalSetpoints) (e.g. spin up shooter wheels automatically while going to shoot setpoint)
 
+- [ ] Long range shoot (Could be strategically important)
+
 LOW PRIORITY:
 
 - [ ] Update readme (is currently copied from yagsl)

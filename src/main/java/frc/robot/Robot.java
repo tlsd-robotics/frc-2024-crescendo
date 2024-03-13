@@ -55,6 +55,7 @@ public class Robot extends TimedRobot
 
     //superstructure.start();
     pneumatics.enableCompressorDigital();
+    pneumatics.clearStickyFaults();
     pdp.clearStickyFaults();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
