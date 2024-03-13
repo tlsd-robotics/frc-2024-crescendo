@@ -24,7 +24,7 @@ import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.intake.IntakeDefaultCommand;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.commands.vision.LiningUp;
+import frc.robot.commands.vision.AimShooter;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
@@ -139,7 +139,7 @@ public class RobotContainer
     // joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
     // joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
-    joy.getBottom().whileTrue(new ShooterOn(intakeShooter, 0.5, 0.5));  
+    joy.getBottom().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_DELAY));  
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

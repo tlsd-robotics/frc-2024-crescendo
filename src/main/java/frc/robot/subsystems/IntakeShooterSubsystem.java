@@ -54,4 +54,12 @@ public class IntakeShooterSubsystem extends SubsystemBase {
   public ColorSensorV3 getSensor() {
     return sensor;
   }
+
+  public CANSparkMax getLeader() {
+    return shooterLeader;
+  }
+
+    public CANSparkMax getFollower() {
+    return shooterFollower;
+  }
 }

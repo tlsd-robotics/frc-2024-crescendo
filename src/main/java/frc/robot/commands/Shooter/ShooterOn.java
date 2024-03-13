@@ -4,8 +4,12 @@
 
 package frc.robot.commands.Shooter;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 
 public class ShooterOn extends Command {
@@ -14,20 +18,28 @@ public class ShooterOn extends Command {
   private IntakeShooterSubsystem intakeShooter; 
   private double intakePower;
   private double shooterPower;
-  private double value; 
+  private double value, intakeClearTime, delay; 
+  private RelativeEncoder leaderEncoder, followerEncoder;
   
   
-  public ShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower) {
+  public ShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower, double delay) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intakeShooter = intakeShooter; 
     this.intakePower = intakePower;
     this.shooterPower = shooterPower;
+    this.delay = delay;
+
     addRequirements(intakeShooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    leaderEncoder = intakeShooter.getLeader().getEncoder();
+    followerEncoder = intakeShooter.getFollower().getEncoder();
+
+    intakeClearTime = 0.0;
+
     ShootTimer.reset();
     ShootTimer.start();
   }
@@ -36,10 +48,12 @@ public class ShooterOn extends Command {
   @Override
   public void execute() {
     value = ShootTimer.get();
-    if (value < .5) { //TODO: Transition to rpm based PID control rather than inconsistent timer based system
+    if (leaderEncoder.getVelocity() >= Math.abs(shooterPower * Constants.Shooter.MAX_MOTOR_RPM) && followerEncoder.getVelocity() >= Math.abs(shooterPower * Constants.Shooter.MAX_MOTOR_RPM)) { 
       intakeShooter.setShooterSpeed(intakePower);
     }
     else {
+      if (intakeClearTime == 0.0) intakeClearTime = value;
+      
       intakeShooter.setIntakeSpeed(intakePower);
       intakeShooter.setShooterSpeed(shooterPower);
     }
@@ -49,12 +63,11 @@ public class ShooterOn extends Command {
   @Override
   public void end(boolean interrupted) {
     intakeShooter.setShooterSpeed(0.0);
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: Detect when completed
+    return (intakeClearTime - value) >= delay;
   }
 }

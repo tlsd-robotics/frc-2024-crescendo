@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
@@ -75,10 +76,11 @@ public static final class Arm
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
-  public static final ArmSubsystem.Setpoint HOME    = new Setpoint(15, false);
-  public static final ArmSubsystem.Setpoint INTAKE  = new Setpoint(0, true);
-  public static final ArmSubsystem.Setpoint SPEAKER = new Setpoint(0, true);
-  public static final ArmSubsystem.Setpoint AMP     = new Setpoint(85, true);
+  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(15, false);
+  public static final ArmSubsystem.Setpoint INTAKE               = new Setpoint(0, true);
+  public static final ArmSubsystem.Setpoint SPEAKER              = new Setpoint(0, true);
+  public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(85, true);
+  public static final ArmSubsystem.Setpoint DISENGAGE_SUPPORT    = new Setpoint(30, false);
 }
 
 public static final class Shooter 
@@ -87,8 +89,13 @@ public static final class Shooter
   public static final int SHOOTER_FOLLOWER_ID = 17;
 
   public static final double WHEEL_DIAMETER_INCHES = 4;
-  public static final double DEFAULT_SHOOT_SPEED = 1;
+  public static final double DEFAULT_SHOOT_SPEED = 0.3;
   public static final double DEFAULT_INTAKE_SPEED = 0.1;
+  public static final double DEFAULT_DELAY = 0.5;
+
+  public static final double MAX_MOTOR_RPM = 5676;
+
+  public static final double MAX_RANGE = 2;
 }
 
 public static final class Intake 
@@ -98,6 +105,9 @@ public static final class Intake
 
   public static final double WHEEL_DIAMETER_INCHES = 2;
   public static final double DEFAULT_SPEED = 0.25;
+
+  public static final double NOTE_EDGE = 250;
+  public static final double NOTE_CENTER = 500;
 }
 
 public static final class Climber 
@@ -109,6 +119,14 @@ public static final class Superstructure
 {
   public static final int PH_CAN_ID = 2;
   public static final int PDP_CAN_ID = 1;
+}
+
+public static final class Vision 
+{
+  public static final Translation3d ROBOT_TO_CAM_TRANSLATION = new Translation3d(0.5, 0.0, 0.0); // X = forward, Y = left, Z = up
+  public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, 0.0, 0.0);
+
+  public static final double INTAKE_SETPOINT = -20.0;
 }
 }
 
