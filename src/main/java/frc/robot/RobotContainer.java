@@ -61,11 +61,6 @@ public class RobotContainer
     configureBindings();
     configureAutoCommands();
 
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot f
-    // controls are front-left positive
-    // left stick controls translation
-    // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
         () -> MathUtil.applyDeadband(-joy.getRawY(), OperatorConstants.Y_DEADBAND),
         () -> MathUtil.applyDeadband(-joy.getRawX(), OperatorConstants.X_DEADBAND),

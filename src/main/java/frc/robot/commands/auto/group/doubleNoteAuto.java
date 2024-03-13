@@ -30,7 +30,7 @@ public class doubleNoteAuto extends SequentialCommandGroup {
       new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_DELAY),
       new AlignWithNote(swerve, 0.25, 0.8, false),
       arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE),
-      new DriveAutoIntake(swerve, intakeShooter, 0.25, Constants.Shooter.DEFAULT_INTAKE_SPEED, 4),
+      new DriveAutoIntake(swerve, intakeShooter, 0.25, Constants.Shooter.DEFAULT_INTAKE_SPEED, 3),
       arm.GetArmToSetpointCommand(Constants.Setpoints.HOME),
       new AutoAimShooter(swerve, intakeShooter, 0.25),
       new ParallelCommandGroup(new ArmToShooterAngle(arm), new ArmToExtension(true, arm)),
