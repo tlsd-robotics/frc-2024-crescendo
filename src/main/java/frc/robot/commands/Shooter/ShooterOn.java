@@ -4,7 +4,6 @@
 
 package frc.robot.commands.Shooter;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.Timer;

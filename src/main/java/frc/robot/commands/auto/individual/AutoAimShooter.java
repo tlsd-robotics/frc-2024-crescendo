@@ -7,15 +7,12 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import TLsdLibrary.Controllers.T16000M;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Vision;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 

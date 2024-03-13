@@ -6,25 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.intake.IntakeDefaultCommand;
-import frc.robot.commands.intake.IntakeOn;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.commands.vision.AimShooter;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
@@ -35,9 +26,6 @@ import frc.robot.commands.climber.DefaultClimberCommand;
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import TLsdLibrary.Controllers.*;
 
 /**
@@ -72,26 +60,6 @@ public class RobotContainer
     // Configure the trigger bindings
     configureBindings();
     configureAutoCommands();
-
-    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(joy.getRawY(), OperatorConstants.Y_DEADBAND),
-                                                                   () -> MathUtil.applyDeadband(joy.getRawX(), OperatorConstants.X_DEADBAND),
-                                                                   () -> MathUtil.applyDeadband(joy.getRawZ(), OperatorConstants.Z_DEADBAND),
-                                                                   () -> joy.getButtonBoolean(11),
-                                                                   () -> joy.getButtonBoolean(12),
-                                                                   () -> joy.getButtonBoolean(13),
-                                                                   () -> joy.getButtonBoolean(14));
-
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
-    // left stick controls translation
-    // right stick controls the desired angle NOT angular rotation
-    Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(joy.getRawY(), OperatorConstants.Y_DEADBAND),
-        () -> MathUtil.applyDeadband(joy.getRawX(), OperatorConstants.X_DEADBAND),
-        () -> joy.getRawZ(),
-        () -> joy.getRawY());
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot f

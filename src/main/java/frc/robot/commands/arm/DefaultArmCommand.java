@@ -7,8 +7,6 @@ package frc.robot.commands.arm;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import TLsdLibrary.Controllers.LogitechF310;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
