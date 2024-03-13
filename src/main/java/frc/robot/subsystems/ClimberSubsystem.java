@@ -15,7 +15,7 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new Climber. */
 
   //DoubleSolenoid climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.Climber.FORWARD_CHANNEL, Constants.Climber.REVERSE_CHANNEL);
-  DoubleSolenoid climberSolenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, Constants.Climber.FORWARD_CHANNEL, Constants.Climber.REVERSE_CHANNEL);
+  DoubleSolenoid climberSolenoid = new DoubleSolenoid(Constants.Climber.PNEUMATICS_MODULE_ID, PneumaticsModuleType.REVPH, Constants.Climber.FORWARD_CHANNEL, Constants.Climber.REVERSE_CHANNEL);
 
   public void setExetended(boolean extended) {
     if (extended) {

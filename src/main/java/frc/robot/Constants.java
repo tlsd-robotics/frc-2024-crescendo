@@ -59,13 +59,13 @@ public static final class Arm
   public static final int LEADER_ID = 25;
   public static final int FOLLOWER_ID = 22;
   public static final int ENCODER_ID = 0;
-  public static final int PNEUMATICS_MODULE_ID = 0;
+  public static final int PNEUMATICS_MODULE_ID = 2;
   public static final int FORWARD_CHANNEL = 3;
   public static final int REVERSE_CHANNEL = 2;
   public static final int EXTENSIONSWITCH = 1;
   public static final int ROTATIONSWITCH = 2;
 
-  public static final double MAX_ANGLE_DEGREES = 180;
+  public static final double MAX_ANGLE_DEGREES = 95;
   public static final double MIN_ANGLE_RETRACTED_DEGREES = 15;
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
@@ -102,6 +102,7 @@ public static final class Intake
 
 public static final class Climber 
 {
+  public static final int PNEUMATICS_MODULE_ID = 2;
   public static final int FORWARD_CHANNEL = 1;
   public static final int REVERSE_CHANNEL = 0;
 }
