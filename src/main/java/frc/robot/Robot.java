@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,7 +31,10 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
-  private Superstructure superstructure = new Superstructure();
+  //private Superstructure superstructure = new Superstructure();
+
+  private final PneumaticHub pneumatics = new PneumaticHub(Constants.Superstructure.PH_CAN_ID);
+  private final  PowerDistribution pdp = new PowerDistribution(Constants.Superstructure.PDP_CAN_ID, ModuleType.kRev);
 
   public Robot()
   {
@@ -46,6 +52,10 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
+
+    //superstructure.start();
+    pneumatics.enableCompressorDigital();
+    pdp.clearStickyFaults();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
