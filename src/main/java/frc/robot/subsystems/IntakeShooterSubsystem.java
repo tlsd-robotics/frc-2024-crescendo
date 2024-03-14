@@ -87,8 +87,8 @@ public class IntakeShooterSubsystem extends SubsystemBase {
       shooter2PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
     }
     else {
-      shooter1.disable();
-      shooter2.disable();
+      shooter1PID.setReference(0, ControlType.kDutyCycle);
+      shooter2PID.setReference(0, ControlType.kDutyCycle);
     }
     currentShooterSpeed = speed;
     SmartDashboard.putNumber("Shooter Speed: ", speed);

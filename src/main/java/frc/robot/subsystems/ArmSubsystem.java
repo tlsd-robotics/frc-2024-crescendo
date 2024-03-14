@@ -111,7 +111,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void setExtened(boolean extend) {
     if (enabled) {
       if(!extend){
-        if(setpoint > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES){
+        if((setpoint > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES) && (getEncoderAngle() > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)){
           armExtender.set(DoubleSolenoid.Value.kReverse);
         }
       }
@@ -138,10 +138,10 @@ public class ArmSubsystem extends SubsystemBase {
       leader.set(pid.calculate(getEncoderAngle(), setpoint));
     }
     if (targetExtension != extended) {
-      if (targetExtension == true && extensionSwitch.get() || (extensionTimer.get() > 1)) {
+      if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > 1))) {
         extended = true;
       }
-      else if (targetExtension == false) { //TODO: Add code for retraction limit switch
+      else if (targetExtension == false) { //TODO: Add code for retraction limit switch, Add Time to Constants
         extended = false;
       }
     }
@@ -163,7 +163,7 @@ public class ArmSubsystem extends SubsystemBase {
   } 
   
 
-
+  //TODO: Use Command Event Methods to Debug: https://docs.wpilib.org/en/2022/docs/software/commandbased/command-scheduler.html
   public SequentialCommandGroup GetArmToSetpointCommand(Setpoint setpoint) {
     SequentialCommandGroup command = new SequentialCommandGroup();
 
