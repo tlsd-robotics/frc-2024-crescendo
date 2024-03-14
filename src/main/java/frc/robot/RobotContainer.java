@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.Setpoints;
 import frc.robot.commands.HaltArmShooterIntake;
 import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.Shooter.ShooterSpin;
@@ -27,13 +29,18 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.arm.*;
+import frc.robot.commands.auto.individual.AutoShooterOn;
+import frc.robot.commands.auto.individual.SimpleAutoIntake;
 import frc.robot.commands.climber.ClimberSet;
 import frc.robot.commands.climber.DefaultClimberCommand;
 import frc.robot.commands.functionalSetpoints.HomeFunction;
+import frc.robot.commands.functionalSetpoints.SpeakerFunction;
 
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import TLsdLibrary.Controllers.*;
 
 /**
@@ -132,7 +139,10 @@ public class RobotContainer
 
   private void configureAutoCommands() {
     //Register commands for use in autonomous as follows:
-    //NamedCommands.addCommands("Name in Pathplanner", command);
+    //NamedCommands.registerCommand("Name in Pathplanner", command);
+    NamedCommands.registerCommand("SimpleAutoIntake", new SimpleAutoIntake(drivebase, intakeShooter, 0.1, 10));
+    NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(arm.GetArmToSetpointCommand(Setpoints.SPEAKER), new AutoShooterOn(intakeShooter, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED)));
+    NamedCommands.registerCommand("ArmRetract", arm.GetArmToSetpointCommand(Setpoints.HOME));
   }
 
   /**
@@ -145,7 +155,7 @@ public class RobotContainer
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("New Path", true);
     //return drivebase.getAutonomousCommand("New Path", true);
-    return autoChooser.getSelected();
+    return new SequentialCommandGroup(arm.GetArmToSetpointCommand(Constants.Setpoints.DISENGAGE_SUPPORT), autoChooser.getSelected());
   }
 
   public void setDriveMode()

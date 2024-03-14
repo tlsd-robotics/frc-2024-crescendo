@@ -11,18 +11,18 @@ import frc.robot.Constants;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class AutoIntake extends Command {
+public class SimpleAutoIntake extends Command {
   IntakeShooterSubsystem intake;
   SwerveSubsystem swerve;
   Timer timer;
   double speed, time, ir;
 
   /** Creates a new AutoIntake. */
-  public AutoIntake(SwerveSubsystem swerve, IntakeShooterSubsystem intake, double speed, double time) {
+  public SimpleAutoIntake(SwerveSubsystem swerve, IntakeShooterSubsystem intake, double speed, double abandonTime) {
     this.intake = intake;
     this.swerve = swerve;
     this.speed = speed;
-    this.time = time;
+    this.time = abandonTime;
 
     addRequirements(swerve, intake);
   }
@@ -39,6 +39,7 @@ public class AutoIntake extends Command {
   public void execute() {
     ir = intake.getSensor().getProximity();
 
+    intake.setIntakeSpeed(Constants.Shooter.DEFAULT_INTAKE_SPEED);
     swerve.drive(new ChassisSpeeds(speed, 0.0, 0.0));
   }
 
@@ -46,11 +47,12 @@ public class AutoIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     swerve.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+    intake.setIntakeSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ir < Constants.Intake.NOTE_EDGE;
+    return (ir < Constants.Intake.NOTE_EDGE) || (timer.get() > time);
   }
 }

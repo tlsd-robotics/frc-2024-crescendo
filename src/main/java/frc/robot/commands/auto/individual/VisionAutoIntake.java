@@ -16,7 +16,7 @@ import frc.robot.Vision;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class DriveAutoIntake extends Command {
+public class VisionAutoIntake extends Command {
   SwerveSubsystem drive;
   IntakeShooterSubsystem intake;
   PIDController pidZ, pidY;
@@ -25,7 +25,7 @@ public class DriveAutoIntake extends Command {
   Timer timer;
 
   /** Creates a new LiningUp. */
-  public DriveAutoIntake(SwerveSubsystem DriveTrain, IntakeShooterSubsystem intake, double Tolerance, double speed, double disableTime) {
+  public VisionAutoIntake(SwerveSubsystem DriveTrain, IntakeShooterSubsystem intake, double Tolerance, double speed, double disableTime) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = DriveTrain;
     this.intake = intake;

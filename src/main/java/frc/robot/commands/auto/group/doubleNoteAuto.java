@@ -12,7 +12,7 @@ import frc.robot.commands.arm.ArmToExtension;
 import frc.robot.commands.auto.individual.AlignWithNote;
 import frc.robot.commands.auto.individual.ArmToShooterAngle;
 import frc.robot.commands.auto.individual.AutoAimShooter;
-import frc.robot.commands.auto.individual.DriveAutoIntake;
+import frc.robot.commands.auto.individual.VisionAutoIntake;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -30,7 +30,7 @@ public class doubleNoteAuto extends SequentialCommandGroup {
       new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED),
       new AlignWithNote(swerve, 0.25, 0.8),
       arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE),
-      new DriveAutoIntake(swerve, intakeShooter, 0.25, Constants.Shooter.DEFAULT_INTAKE_SPEED, 3),
+      new VisionAutoIntake(swerve, intakeShooter, 0.25, Constants.Shooter.DEFAULT_INTAKE_SPEED, 3),
       arm.GetArmToSetpointCommand(Constants.Setpoints.HOME),
       new AutoAimShooter(swerve, intakeShooter, 0.25),
       new ParallelCommandGroup(new ArmToShooterAngle(arm), new ArmToExtension(true, arm)),

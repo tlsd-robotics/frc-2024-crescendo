@@ -24,7 +24,6 @@ public class AutoShooterOn extends Command {
     this.intakeShooter = intakeShooter; 
     this.intakePower = intakePower;
     this.shooterPower = shooterPower;
-
     addRequirements(intakeShooter);
   }
 
