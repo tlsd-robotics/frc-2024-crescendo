@@ -11,6 +11,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Util;
@@ -60,6 +61,10 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     intakeFollower.setInverted(false);
 
     sensor = new ColorSensorV3(I2C.Port.kOnboard);
+
+    SmartDashboard.putNumber("Shooter Speed: ", -2);
+    SmartDashboard.putNumber("Intake Speed: ",  -2);
+    
   }
 
 
@@ -70,12 +75,14 @@ public class IntakeShooterSubsystem extends SubsystemBase {
 
   public void setIntakeSpeed(double speed) {
     intakeLeader.set(speed);
+    SmartDashboard.putNumber("Intake Speed: ", speed);
   }
 
   public void setShooterSpeed(double speed) {
     shooter1PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
     shooter2PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
     currentShooterSpeed = speed;
+    SmartDashboard.putNumber("Shooter Speed: ", speed);
   }
 
   public boolean shooterAtSetpoint() {

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.HaltArmShooterIntake;
 import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.intake.IntakeDefaultCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.arm.*;
 import frc.robot.commands.climber.DefaultClimberCommand;
+import frc.robot.commands.functionalSetpoints.HomeFunction;
 
 import java.io.File;
 
@@ -74,10 +76,10 @@ public class RobotContainer
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
 
-    //arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0, true), controller.buttonB, controller.buttonX, arm));
-    arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
+    arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0.02, true), controller.getDPadRight(), controller.getDPadLeft(), arm));
+    //arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
     intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller::getLeftXAxis, intakeShooter));
-    climber.setDefaultCommand(new DefaultClimberCommand(controller.getButtonY(), controller.getButtonA(), climber));
+    climber.setDefaultCommand(new DefaultClimberCommand(controller.dPadUp, controller.dPadDown, climber));
 
     //Creates a sendable chooser using all autos paths in roborio delploy folder. See:
     // https://pathplanner.dev/pplib-build-an-auto.html#create-a-sendablechooser-with-all-autos-in-project
@@ -102,7 +104,9 @@ public class RobotContainer
     // joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
     // joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
-    joy.getBottom().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));  
+    joy.getBottom().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
+    controller.buttonA.onTrue(new HomeFunction(arm));
+    controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
