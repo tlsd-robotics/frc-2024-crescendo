@@ -49,7 +49,6 @@ public class DefaultArmCommand extends Command {
     SmartDashboard.putNumber("Arm Setpoint", arm.getAngleSetpoint());
     SmartDashboard.putNumber("Arm Rotation Input", rotationInput.getAsDouble());
     timer.reset();
-    //}
 
     if(extend.getAsBoolean()) {
         arm.setExtened(true);

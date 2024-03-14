@@ -79,13 +79,17 @@ public class ArmSubsystem extends SubsystemBase {
 
     boolean isExtended = targetExtension;
 
+    boolean angleTooLarge = angle > Constants.Arm.MAX_ANGLE_DEGREES;
+    boolean angleTooSmall = isExtended ? (angle < Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : (angle < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES);
+
     if (enabled) {
-      if(angle < Constants.Arm.MAX_ANGLE_DEGREES && 
-        ((isExtended ? (angle > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : 
-                       (angle > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)
-         )
-        )
-      ) {
+      if(!angleTooLarge && !angleTooSmall) {
+        setpoint = angle;
+      }
+      else if (angleTooSmall && (angle > setpoint)) { //Allow setpoints that move closer to a safe angle if the current setpoint is unsafe
+        setpoint = angle;
+      }
+      else if (angleTooLarge && (angle < setpoint)) {
         setpoint = angle;
       }
     }
