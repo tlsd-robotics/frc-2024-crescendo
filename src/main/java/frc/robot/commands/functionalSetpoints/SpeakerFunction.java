@@ -30,7 +30,7 @@ public class SpeakerFunction extends Command {
     SequentialCommandGroup shootFunctionCommands = new SequentialCommandGroup();
     shootFunctionCommands.addCommands(new ShooterSpin(intakeShooter, Constants.Shooter.DEFAULT_SHOOT_SPEED)); //Spin up shooter wheels while moving arm
     shootFunctionCommands.addCommands(arm.GetArmToSetpointCommand(Constants.Setpoints.SPEAKER)); //Move arm into position
-    shootFunctionCommands.addCommands(new ShooterOn(intakeShooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_DELAY)); //Shoot
+    shootFunctionCommands.addCommands(new ShooterOn(intakeShooter, Constants.Intake.DEFAULT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED)); //Shoot
 
     CommandScheduler.getInstance().schedule(shootFunctionCommands);
   }

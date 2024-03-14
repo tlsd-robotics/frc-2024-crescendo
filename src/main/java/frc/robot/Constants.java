@@ -104,6 +104,8 @@ public static final class Shooter
 
   public static final double SHOOTER_PID_MAX_OUT = 1;
   public static final double SHOOTER_PID_MIN_OUT = -1;
+
+  public static final double RPM_TOLERANCE = 10;
   
 }
 

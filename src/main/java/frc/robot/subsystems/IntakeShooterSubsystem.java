@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Util;
 
 public class IntakeShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeShooter. */
@@ -26,11 +27,15 @@ public class IntakeShooterSubsystem extends SubsystemBase {
   private CANSparkMax intakeFollower;
   private ColorSensorV3 sensor; 
 
+  private double currentShooterSpeed = 0;
+
   public IntakeShooterSubsystem() {
     shooter1 = new CANSparkMax(Constants.Shooter.SHOOTER_LEADER_ID, MotorType.kBrushless);
     shooter2 = new CANSparkMax(Constants.Shooter.SHOOTER_FOLLOWER_ID, MotorType.kBrushless);
     shooter1.setInverted(false);
     shooter2.setInverted(false);
+    shooter1.getEncoder().setVelocityConversionFactor(1);
+    shooter2.getEncoder().setVelocityConversionFactor(1);
 
     shooter1PID = shooter1.getPIDController();
     shooter2PID = shooter2.getPIDController();
@@ -70,6 +75,13 @@ public class IntakeShooterSubsystem extends SubsystemBase {
   public void setShooterSpeed(double speed) {
     shooter1PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
     shooter2PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
+    currentShooterSpeed = speed;
+  }
+
+  public boolean shooterAtSetpoint() {
+    double currentRPM = currentShooterSpeed * Constants.Shooter.MAX_MOTOR_RPM;
+    return Util.inRange(shooter1.getEncoder().getVelocity(), currentRPM - Constants.Shooter.RPM_TOLERANCE, currentRPM + Constants.Shooter.RPM_TOLERANCE) &&
+           Util.inRange(shooter2.getEncoder().getVelocity(), currentRPM - Constants.Shooter.RPM_TOLERANCE, currentRPM + Constants.Shooter.RPM_TOLERANCE);
   }
 
   public ColorSensorV3 getSensor() {

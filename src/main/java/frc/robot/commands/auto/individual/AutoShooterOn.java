@@ -13,20 +13,17 @@ import frc.robot.subsystems.IntakeShooterSubsystem;
 
 public class AutoShooterOn extends Command {
   /** Creates a new ShooterOn. */
-  private Timer ShootTimer = new Timer();
   private IntakeShooterSubsystem intakeShooter; 
   private double intakePower;
   private double shooterPower;
-  private double value, intakeClearTime, delay; 
-  private RelativeEncoder leaderEncoder, followerEncoder;
+  private boolean shooterAtSetpoint = false;
   
   
-  public AutoShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower, double delay) {
+  public AutoShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intakeShooter = intakeShooter; 
     this.intakePower = intakePower;
     this.shooterPower = shooterPower;
-    this.delay = delay;
 
     addRequirements(intakeShooter);
   }
@@ -34,27 +31,17 @@ public class AutoShooterOn extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    leaderEncoder = intakeShooter.getLeader().getEncoder();
-    followerEncoder = intakeShooter.getFollower().getEncoder();
-
-    intakeClearTime = 0.0;
-
-    ShootTimer.reset();
-    ShootTimer.start();
+    shooterAtSetpoint = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    value = ShootTimer.get();
-    if (leaderEncoder.getVelocity() >= Math.abs(shooterPower * Constants.Shooter.MAX_MOTOR_RPM) && followerEncoder.getVelocity() >= Math.abs(shooterPower * Constants.Shooter.MAX_MOTOR_RPM)) { 
-      intakeShooter.setShooterSpeed(intakePower);
-    }
-    else {
-      if (intakeClearTime == 0.0) intakeClearTime = value;
-      
+    intakeShooter.setShooterSpeed(shooterPower);
+    if (intakeShooter.shooterAtSetpoint())
+      shooterAtSetpoint = true;
+    if (shooterAtSetpoint) {
       intakeShooter.setIntakeSpeed(intakePower);
-      intakeShooter.setShooterSpeed(shooterPower);
     }
   }
 
@@ -62,11 +49,12 @@ public class AutoShooterOn extends Command {
   @Override
   public void end(boolean interrupted) {
     intakeShooter.setShooterSpeed(0.0);
+    intakeShooter.setIntakeSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intakeClearTime - value) >= delay;
+    return false;
   }
 }
