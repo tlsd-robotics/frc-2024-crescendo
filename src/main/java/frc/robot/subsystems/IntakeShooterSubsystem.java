@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,18 +17,36 @@ import frc.robot.Constants;
 public class IntakeShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeShooter. */
   
-  private CANSparkMax shooterLeader;
-  private CANSparkMax shooterFollower;
+  private CANSparkMax shooter1;
+  private CANSparkMax shooter2;
+  private SparkPIDController shooter1PID;
+  private SparkPIDController shooter2PID;
 
   private CANSparkMax intakeLeader;
   private CANSparkMax intakeFollower;
   private ColorSensorV3 sensor; 
 
   public IntakeShooterSubsystem() {
-    shooterLeader = new CANSparkMax(Constants.Shooter.SHOOTER_LEADER_ID, MotorType.kBrushless);
-    shooterFollower = new CANSparkMax(Constants.Shooter.SHOOTER_FOLLOWER_ID, MotorType.kBrushless);
-    shooterLeader.setInverted(false);
-    shooterFollower.setInverted(false);
+    shooter1 = new CANSparkMax(Constants.Shooter.SHOOTER_LEADER_ID, MotorType.kBrushless);
+    shooter2 = new CANSparkMax(Constants.Shooter.SHOOTER_FOLLOWER_ID, MotorType.kBrushless);
+    shooter1.setInverted(false);
+    shooter2.setInverted(false);
+
+    shooter1PID = shooter1.getPIDController();
+    shooter2PID = shooter2.getPIDController();
+
+    shooter1PID.setP    (Constants.Shooter.SHOOTER_KP);
+    shooter1PID.setI    (Constants.Shooter.SHOOTER_KI);
+    shooter1PID.setD    (Constants.Shooter.SHOOTER_KD);
+    shooter1PID.setIZone(Constants.Shooter.SHOOTER_KIZ);
+    shooter1PID.setFF   (Constants.Shooter.SHOOTER_KFF);
+    shooter2PID.setP    (Constants.Shooter.SHOOTER_KP);
+    shooter2PID.setI    (Constants.Shooter.SHOOTER_KI);
+    shooter2PID.setD    (Constants.Shooter.SHOOTER_KD);
+    shooter2PID.setIZone(Constants.Shooter.SHOOTER_KIZ);
+    shooter2PID.setFF   (Constants.Shooter.SHOOTER_KFF);
+    shooter1PID.setOutputRange(Constants.Shooter.SHOOTER_PID_MIN_OUT, Constants.Shooter.SHOOTER_PID_MAX_OUT);
+    shooter2PID.setOutputRange(Constants.Shooter.SHOOTER_PID_MIN_OUT, Constants.Shooter.SHOOTER_PID_MAX_OUT);
 
     intakeLeader = new CANSparkMax(Constants.Intake.LEADER_ID, MotorType.kBrushless);
     intakeFollower = new CANSparkMax(Constants.Intake.FOLLOWER_ID, MotorType.kBrushless);
@@ -48,18 +68,11 @@ public class IntakeShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterSpeed(double speed) {
-    shooterLeader.set(speed);
+    shooter1PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
+    shooter2PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
   }
 
   public ColorSensorV3 getSensor() {
     return sensor;
-  }
-
-  public CANSparkMax getLeader() {
-    return shooterLeader;
-  }
-
-    public CANSparkMax getFollower() {
-    return shooterFollower;
   }
 }

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands.auto.individual;
 
 import com.revrobotics.RelativeEncoder;
 
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 
-public class ShooterOn extends Command {
+public class AutoShooterOn extends Command {
   /** Creates a new ShooterOn. */
   private Timer ShootTimer = new Timer();
   private IntakeShooterSubsystem intakeShooter; 
@@ -21,7 +21,7 @@ public class ShooterOn extends Command {
   private RelativeEncoder leaderEncoder, followerEncoder;
   
   
-  public ShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower, double delay) {
+  public AutoShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower, double delay) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intakeShooter = intakeShooter; 
     this.intakePower = intakePower;
@@ -51,6 +51,7 @@ public class ShooterOn extends Command {
       intakeShooter.setShooterSpeed(intakePower);
     }
     else {
+      if (intakeClearTime == 0.0) intakeClearTime = value;
       
       intakeShooter.setIntakeSpeed(intakePower);
       intakeShooter.setShooterSpeed(shooterPower);
@@ -66,6 +67,6 @@ public class ShooterOn extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (intakeClearTime - value) >= delay;
   }
 }

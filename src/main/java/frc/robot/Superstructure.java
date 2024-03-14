@@ -12,14 +12,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 public class Superstructure {
     private final PneumaticHub pneumatics = new PneumaticHub(Constants.Superstructure.PH_CAN_ID);
     private final PowerDistribution pdp = new PowerDistribution(Constants.Superstructure.PDP_CAN_ID, ModuleType.kRev);
-    private final Compressor compressor = new Compressor(Constants.Superstructure.PH_CAN_ID, PneumaticsModuleType.REVPH);
 
     public Superstructure() {}
 
     public void start() {
         pneumatics.clearStickyFaults();
         pdp.clearStickyFaults();
-
-        compressor.enableDigital();
     }
 }

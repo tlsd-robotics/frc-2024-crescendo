@@ -95,6 +95,16 @@ public static final class Shooter
   public static final double MAX_MOTOR_RPM = 5676;
 
   public static final double MAX_RANGE = 2;
+
+  public static final double SHOOTER_KP  = 6e-5;
+  public static final double SHOOTER_KI  = 0;
+  public static final double SHOOTER_KD  = 0; 
+  public static final double SHOOTER_KIZ = 0;
+  public static final double SHOOTER_KFF = 0.000015;
+
+  public static final double SHOOTER_PID_MAX_OUT = 1;
+  public static final double SHOOTER_PID_MIN_OUT = -1;
+  
 }
 
 public static final class Intake 
