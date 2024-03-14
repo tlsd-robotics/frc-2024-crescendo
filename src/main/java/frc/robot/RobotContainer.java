@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -18,11 +19,15 @@ import frc.robot.commands.HaltArmShooterIntake;
 import frc.robot.commands.Shooter.ShooterOn;
 import frc.robot.commands.Shooter.ShooterSpin;
 import frc.robot.commands.intake.IntakeDefaultCommand;
+import frc.robot.commands.intake.IntakeOn;
+import frc.robot.commands.intake.IntakeShooterSpin;
+import frc.robot.commands.vision.AimIntake;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.arm.*;
+import frc.robot.commands.climber.ClimberSet;
 import frc.robot.commands.climber.DefaultClimberCommand;
 import frc.robot.commands.functionalSetpoints.HomeFunction;
 
@@ -79,7 +84,7 @@ public class RobotContainer
 
     arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0.02, true), controller.getDPadRight(), controller.getDPadLeft(), arm));
     //arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
-    intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller::getRightXAxis, intakeShooter));
+    intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller.getAxisSupplier(controller.rightXAxis, false, 0.02, true), intakeShooter));
     climber.setDefaultCommand(new DefaultClimberCommand(controller.dPadUp, controller.dPadDown, climber));
 
     //Creates a sendable chooser using all autos paths in roborio delploy folder. See:
@@ -99,17 +104,30 @@ public class RobotContainer
   private void configureBindings()
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    //joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
-    joy.getTrigger().onTrue((new InstantCommand(drivebase::zeroGyro)));
-    joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    // joy.getBottom().whileTrue(new LiningUp(drivebase, Vision.fronLimelight, Vision.two, joy));
+    joy.getTrigger().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
+    joy.getBottom().whileTrue(new ParallelCommandGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
-    // joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
-    joy.getBottom().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
-    controller.buttonA.onTrue(new HomeFunction(arm));
-    controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));
-    controller.buttonB.whileTrue(new ShooterSpin(intakeShooter, 1));
-//    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    joy.getLeft().onTrue((new InstantCommand(drivebase::zeroGyro)));
+    joy.POVUp.onTrue(new ClimberSet(true, climber));
+    joy.POVDown.onTrue(new ClimberSet(false, climber));
+
+    //controller.buttonA.onTrue(new HomeFunction(arm));
+    //controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));
+    //controller.buttonB.whileTrue(new ShooterSpin(intakeShooter, 1));
+
+    controller.buttonA.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.HOME));
+    controller.buttonB.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
+    controller.buttonX.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.SPEAKER));
+    controller.buttonY.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
+    
+    controller.getAxisTrigger(controller.rightTrigger, 0.9, true).whileTrue(new IntakeShooterSpin(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED * Constants.Shooter.INTAKE_RELATIVE_SPEED_RATIO));
+    controller.getAxisTrigger(controller.leftTrigger, 0.9, true).whileTrue(new ShooterOn(intakeShooter, 0, 0));
+    controller.getButtonRB().whileTrue(new IntakeShooterSpin(intakeShooter, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
+    
+    controller.buttonBack.onTrue(new InstantCommand(arm::disableArm));
+    controller.buttonStart.onTrue(new InstantCommand(arm::enableArm));
   }
 
   private void configureAutoCommands() {

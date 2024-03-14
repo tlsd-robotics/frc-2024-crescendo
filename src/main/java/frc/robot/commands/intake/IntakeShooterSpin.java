@@ -1,4 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -10,15 +9,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 
-public class IntakeDefaultCommand extends Command {
+public class IntakeShooterSpin extends Command {
 
-  DoubleSupplier axis;
+  double shooterSpeed;
+  double intakeSpeed;
   IntakeShooterSubsystem intakeShooter;
 
 
   /** Creates a new ShooterIntakeDefaultCommand. */
-  public IntakeDefaultCommand(DoubleSupplier axis, IntakeShooterSubsystem intakeShooter) {
-    this.axis = axis;
+  public IntakeShooterSpin(IntakeShooterSubsystem intakeShooter, double intakeSpeed, double shooterSpeed) {
+    this.intakeSpeed = intakeSpeed;
+    this.shooterSpeed = shooterSpeed;
     this.intakeShooter = intakeShooter;
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,8 +33,8 @@ public class IntakeDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeShooter.setIntakeSpeed(axis.getAsDouble());
-    intakeShooter.setShooterSpeed(Constants.Shooter.INTAKE_RELATIVE_SPEED_RATIO * axis.getAsDouble());
+    intakeShooter.setIntakeSpeed(shooterSpeed);
+    intakeShooter.setShooterSpeed(intakeSpeed);
   }
 
   // Called once the command ends or is interrupted.

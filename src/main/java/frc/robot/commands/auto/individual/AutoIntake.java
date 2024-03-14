@@ -7,6 +7,7 @@ package frc.robot.commands.auto.individual;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
@@ -38,7 +39,7 @@ public class AutoIntake extends Command {
   public void execute() {
     ir = intake.getSensor().getProximity();
 
-    swerve.drive(swerve.getRobotVelocity().plus(new ChassisSpeeds(speed, 0.0, 0.0)));
+    swerve.drive(new ChassisSpeeds(speed, 0.0, 0.0));
   }
 
   // Called once the command ends or is interrupted.
@@ -50,6 +51,6 @@ public class AutoIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ir < 500;
+    return ir < Constants.Intake.NOTE_EDGE;
   }
 }

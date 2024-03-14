@@ -62,10 +62,14 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     intakeFollower.follow(intakeLeader);
     intakeLeader.setInverted(false);
     intakeFollower.setInverted(false);
+    intakeLeader.setIdleMode(IdleMode.kBrake);
+    intakeFollower.setIdleMode(IdleMode.kBrake);
 
     sensor = new ColorSensorV3(I2C.Port.kOnboard);
 
-    SmartDashboard.putNumber("Shooter Speed: ", -2);
+    SmartDashboard.putNumber("Shooter 1 Speed: ", -2);
+    SmartDashboard.putNumber("Shooter 2 Speed: ", -2);
+    SmartDashboard.putNumber("Shooter Target Speed: ", -2);
     SmartDashboard.putNumber("Intake Speed: ",  -2);
     
   }
@@ -91,7 +95,9 @@ public class IntakeShooterSubsystem extends SubsystemBase {
       shooter2PID.setReference(0, ControlType.kDutyCycle);
     }
     currentShooterSpeed = speed;
-    SmartDashboard.putNumber("Shooter Speed: ", speed);
+    SmartDashboard.putNumber("Shooter Target Speed: ", speed);
+    SmartDashboard.putNumber("Shooter 1 Speed: ", shooter1.getEncoder().getVelocity() / Constants.Shooter.MAX_MOTOR_RPM);
+    SmartDashboard.putNumber("Shooter 2 Speed: ", shooter2.getEncoder().getVelocity() / Constants.Shooter.MAX_MOTOR_RPM);
   }
 
   public boolean shooterAtSetpoint() {

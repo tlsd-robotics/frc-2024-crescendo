@@ -88,8 +88,8 @@ public static final class Shooter
   public static final int SHOOTER_FOLLOWER_ID = 17;
 
   public static final double WHEEL_DIAMETER_INCHES = 4;
-  public static final double DEFAULT_SHOOT_SPEED = 0.3;
-  public static final double DEFAULT_INTAKE_SPEED = 0.1;
+  public static final double DEFAULT_SHOOT_SPEED = 1;
+  public static final double DEFAULT_INTAKE_SPEED = 1;
   public static final double DEFAULT_DELAY = 2;
 
   public static final double MAX_MOTOR_RPM = 5676;
@@ -106,6 +106,8 @@ public static final class Shooter
   public static final double SHOOTER_PID_MIN_OUT = -1;
 
   public static final double RPM_TOLERANCE = 10;
+
+  public static final double INTAKE_RELATIVE_SPEED_RATIO = (1.0/10.0);
   
 }
 

@@ -1,12 +1,18 @@
 package TLsdLibrary.Controllers;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 public class T16000M extends GenericController {
 
     public T16000M(int port) {
         super(port);
     }
+
+    public POVButton POVUp    = new POVButton(joy, 0);
+    public POVButton POVRight = new POVButton(joy, 90);
+    public POVButton POVDown  = new POVButton(joy, 180);
+    public POVButton POVLeft  = new POVButton(joy, 270);
 
 
     public double getRawX() {

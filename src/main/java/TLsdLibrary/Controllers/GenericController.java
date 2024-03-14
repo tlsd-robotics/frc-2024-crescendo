@@ -5,6 +5,7 @@
 package TLsdLibrary.Controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
 public class GenericController {
@@ -16,5 +17,9 @@ public class GenericController {
 
     public AxisSupplier getAxisSupplier(int axisId, boolean squared, double deadzone, boolean inverted) {
         return new AxisSupplier(joy, axisId, squared, deadzone, inverted);
+    }
+
+    public Trigger getAxisTrigger (int axisID, double triggerPoint, boolean greaterThan) {
+        return new Trigger(new AxisBooleanSupplier(triggerPoint, greaterThan, joy, axisID));
     }
 }
