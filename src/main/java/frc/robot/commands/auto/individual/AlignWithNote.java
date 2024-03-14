@@ -20,15 +20,13 @@ public class AlignWithNote extends Command {
   double tolerance;
   double spinRate;
   PhotonCamera cam;
-  boolean constant;
 
   /** Creates a new LiningUp. */
-  public AlignWithNote(SwerveSubsystem DriveTrain, double Tolerance, double spinRate, boolean constant) {
+  public AlignWithNote(SwerveSubsystem DriveTrain, double Tolerance, double spinRate) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = DriveTrain;
     this.tolerance = Tolerance;
     this.spinRate = Units.degreesToRadians(spinRate);
-    this.constant = constant;
 
     this.cam = Vision.intakeCam;
 
@@ -65,6 +63,6 @@ public class AlignWithNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (constant) ? false : pidZ.atSetpoint();
+    return pidZ.atSetpoint();
   }
 }

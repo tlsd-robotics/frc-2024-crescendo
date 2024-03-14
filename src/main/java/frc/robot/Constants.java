@@ -90,7 +90,7 @@ public static final class Shooter
   public static final double WHEEL_DIAMETER_INCHES = 4;
   public static final double DEFAULT_SHOOT_SPEED = 0.3;
   public static final double DEFAULT_INTAKE_SPEED = 0.1;
-  public static final double DEFAULT_DELAY = 0.5;
+  public static final double DEFAULT_DELAY = 2;
 
   public static final double MAX_MOTOR_RPM = 5676;
 

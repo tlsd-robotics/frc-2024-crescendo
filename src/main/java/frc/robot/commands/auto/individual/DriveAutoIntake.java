@@ -61,13 +61,13 @@ public class DriveAutoIntake extends Command {
     if (results.hasTargets()){   
       PhotonTrackedTarget target = results.getBestTarget();
 
-      drive.drive(drive.getRobotVelocity().plus(new ChassisSpeeds(
+      drive.drive(new ChassisSpeeds(
         pidY.calculate(target.getPitch(), Constants.Vision.INTAKE_SETPOINT),
        0.0,
         pidZ.calculate(target.getYaw(), 0)
-      )));
+      ));
     } else {
-      drive.drive(drive.getRobotVelocity().plus(new ChassisSpeeds(speed, 0.0, 0.0)));
+      drive.drive(new ChassisSpeeds(speed, 0.0, 0.0));
     }
   }
 

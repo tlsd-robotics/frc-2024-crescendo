@@ -47,3 +47,17 @@ LOW PRIORITY:
 
 - [ ] Rate based dynamic arm control (could allow for faster movements)?
 
+
+
+Testing:
+
+[ ] Run Intake / Shooter
+
+[ ] Setpoints
+
+[ ] Drive
+
+[ ] Map Controls
+
+[ ] Basic Auto
+

@@ -17,7 +17,7 @@ public class AutoShooterOn extends Command {
   private double intakePower;
   private double shooterPower;
   private boolean shooterAtSetpoint = false;
-  
+  private Timer shootTimer = new Timer();
   
   public AutoShooterOn(IntakeShooterSubsystem intakeShooter, double intakePower, double shooterPower) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,16 +32,19 @@ public class AutoShooterOn extends Command {
   @Override
   public void initialize() {
     shooterAtSetpoint = false;
+    shootTimer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     intakeShooter.setShooterSpeed(shooterPower);
-    if (intakeShooter.shooterAtSetpoint())
+    if (intakeShooter.shooterAtSetpoint()) {
       shooterAtSetpoint = true;
+    }
     if (shooterAtSetpoint) {
       intakeShooter.setIntakeSpeed(intakePower);
+      shootTimer.start();
     }
   }
 
@@ -55,6 +58,6 @@ public class AutoShooterOn extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return shootTimer.get() > Constants.Shooter.DEFAULT_DELAY;
   }
 }
