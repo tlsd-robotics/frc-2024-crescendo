@@ -32,7 +32,7 @@ public class IntakeDefaultCommand extends Command {
   @Override
   public void execute() {
     intakeShooter.setIntakeSpeed(axis.getAsDouble());
-    intakeShooter.setShooterSpeed((1.0/25.0) * axis.getAsDouble());
+    intakeShooter.setShooterSpeed((1.0/10.0) * axis.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

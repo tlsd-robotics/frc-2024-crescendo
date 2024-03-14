@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
     private boolean enabled = false;
     private boolean extended = false;
     private boolean targetExtension = false;
+    private Timer extensionTimer = new Timer();
   public ArmSubsystem() {
     enabled = false;
     leader = new CANSparkMax(Constants.Arm.LEADER_ID, MotorType.kBrushless);
@@ -117,6 +119,8 @@ public class ArmSubsystem extends SubsystemBase {
         armExtender.set(DoubleSolenoid.Value.kForward);
       }
       targetExtension = extend;
+      extensionTimer.reset();
+      extensionTimer.start();
     }
   }
   
@@ -134,7 +138,7 @@ public class ArmSubsystem extends SubsystemBase {
       leader.set(pid.calculate(getEncoderAngle(), setpoint));
     }
     if (targetExtension != extended) {
-      if (targetExtension == true && extensionSwitch.get()) {
+      if (targetExtension == true && extensionSwitch.get() || (extensionTimer.get() > 1)) {
         extended = true;
       }
       else if (targetExtension == false) { //TODO: Add code for retraction limit switch

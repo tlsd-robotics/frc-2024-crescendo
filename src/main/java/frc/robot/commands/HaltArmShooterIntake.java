@@ -16,8 +16,9 @@ public class HaltArmShooterIntake extends Command {
 
   //Will interrupt any executing arm/intake/shooter commands which are interruptable.
   //Stops Intake and Shooter wheels
-  public HaltArmShooterIntake(IntakeShooterSubsystem intakeShooter) {
+  public HaltArmShooterIntake(IntakeShooterSubsystem intakeShooter, ArmSubsystem arm) {
     this.intakeShooter = intakeShooter;
+    this.arm = arm;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm, intakeShooter);
   }

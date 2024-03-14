@@ -78,7 +78,7 @@ public class RobotContainer
 
     arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0.02, true), controller.getDPadRight(), controller.getDPadLeft(), arm));
     //arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
-    intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller::getLeftXAxis, intakeShooter));
+    intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller::getRightXAxis, intakeShooter));
     climber.setDefaultCommand(new DefaultClimberCommand(controller.dPadUp, controller.dPadDown, climber));
 
     //Creates a sendable chooser using all autos paths in roborio delploy folder. See:
@@ -106,7 +106,9 @@ public class RobotContainer
     // joy.getBottom().whileTrue(new IntakeOn(intake, 0.5));  
     joy.getBottom().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
     controller.buttonA.onTrue(new HomeFunction(arm));
-    controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter));
+    controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));
+    controller.buttonB.onTrue(new InstantCommand(() -> {intakeShooter.setShooterSpeed(1);}));
+    controller.buttonB.onFalse(new InstantCommand(() -> {intakeShooter.setShooterSpeed(0);}));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

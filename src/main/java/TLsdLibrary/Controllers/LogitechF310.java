@@ -16,11 +16,12 @@ public class LogitechF310 extends GenericController {
     private final int btnB = 2;
     private final int btnX = 3;
     private final int btnY = 4;
-    private final int btnL1 = 5;
-    private final int btnR1 = 6;   
-    private final int btnSelect = 8;       
-    private final int btnR3 = 9;
-    private final int btnL3 = 10;
+    private final int btnLB = 5;
+    private final int btnRB = 6;
+    private final int btnBack = 7;   
+    private final int btnStart = 8;       
+    private final int btnL3 = 9;
+    private final int btnR3 = 10;
     public final int leftXAxis = 0;
     public final int leftYAxis = 1;
     public final int leftTrigger = 2;
@@ -42,20 +43,21 @@ public class LogitechF310 extends GenericController {
 //==============================================================================
 //============================ Create Buttons ==================================
 
-    public JoystickButton buttonA = new JoystickButton(joy, btnA);
-    public JoystickButton buttonB = new JoystickButton(joy, btnB);
-    public JoystickButton buttonX = new JoystickButton(joy, btnX);
-    public JoystickButton buttonY = new JoystickButton(joy, btnY);
-    public JoystickButton buttonL1 = new JoystickButton(joy, btnL1);
-    public JoystickButton buttonR1 = new JoystickButton(joy, btnR1);
-    public JoystickButton buttonSelect = new JoystickButton(joy, btnSelect);
-    public JoystickButton buttonR3 = new JoystickButton(joy, btnR3);
-    public JoystickButton buttonL3 = new JoystickButton(joy, btnL3);
+    public JoystickButton buttonA     = new JoystickButton(joy, btnA);
+    public JoystickButton buttonB     = new JoystickButton(joy, btnB);
+    public JoystickButton buttonX     = new JoystickButton(joy, btnX);
+    public JoystickButton buttonY     = new JoystickButton(joy, btnY);
+    public JoystickButton buttonLB    = new JoystickButton(joy, btnLB);
+    public JoystickButton buttonRB    = new JoystickButton(joy, btnRB);
+    public JoystickButton buttonBack  = new JoystickButton(joy, btnBack);
+    public JoystickButton buttonStart = new JoystickButton(joy, btnStart);
+    public JoystickButton buttonR3    = new JoystickButton(joy, btnR3);
+    public JoystickButton buttonL3    = new JoystickButton(joy, btnL3);
 
-    public POVButton dPadUp = new POVButton(joy, 0);
+    public POVButton dPadUp    = new POVButton(joy, 0);
     public POVButton dPadRight = new POVButton(joy, 90);
-    public POVButton dPadDown = new POVButton(joy, 180);
-    public POVButton dPadLeft = new POVButton(joy, 270);
+    public POVButton dPadDown  = new POVButton(joy, 180);
+    public POVButton dPadLeft  = new POVButton(joy, 270);
 
 //==============================================================================
 //================================ Getters =====================================
@@ -103,24 +105,24 @@ public class LogitechF310 extends GenericController {
      * 
      * @return Returns Left bumper button object
      */
-    public JoystickButton getButtonL1() {
-        return buttonL1;
+    public JoystickButton getButtonLB() {
+        return buttonLB;
     }
 
     /**
      * 
      * @return Returns right bumper button object
      */
-    public JoystickButton getButtonR1() {
-        return buttonR1;
+    public JoystickButton getButtonRB() {
+        return buttonRB;
     }
 
     /**
      * 
      * @return Return select button object
      */
-    public JoystickButton getButtonSelect() {
-        return buttonSelect;
+    public JoystickButton getButtonStart() {
+        return buttonStart;
     }
 
     /**
