@@ -108,7 +108,7 @@ public class RobotContainer
 
     joy.getTrigger().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
     joy.getBottom().whileTrue(new ParallelCommandGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)));
-    joy.getRight().onTrue((new InstantCommand(drivebase::lock)));
+    joy.getRight().onTrue((new InstantCommand(drivebase::lock, drivebase)));
     joy.getLeft().onTrue((new InstantCommand(drivebase::zeroGyro)));
     joy.POVUp.onTrue(new ClimberSet(true, climber));
     joy.POVDown.onTrue(new ClimberSet(false, climber));

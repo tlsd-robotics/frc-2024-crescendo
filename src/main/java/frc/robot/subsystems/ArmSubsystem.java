@@ -63,6 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     pid = new PIDController(0.01, 0, 0);
     pid.setTolerance(0.25);
+
+    SmartDashboard.putBoolean("Arm Enabled: ", false);
   }
 
   public double getEncoderAngle() {
@@ -93,11 +95,19 @@ public class ArmSubsystem extends SubsystemBase {
   public void enableArm() {
     setpoint = getEncoderAngle(); // Prevents arm from unexpectedly snapping to a new position when it is first enabled
                                   // greatly contributing to finger safety.
-    this. enabled = true;         
+    this. enabled = true;  
+    SmartDashboard.putBoolean("Arm Enabled: ", true);
+    SmartDashboard.putString("Arm Disable Reason: ", "NA");       
+  }
+
+  public void disableArm(String reason) {
+    this. enabled = false;
+    SmartDashboard.putBoolean("Arm Enabled: ", false);
+    SmartDashboard.putString("Arm Disable Reason: ", reason);
   }
 
   public void disableArm() {
-    this. enabled = false;
+    disableArm("Unknown");
   }
 
   public boolean getExtended() {
@@ -134,6 +144,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    if (!encoder.isConnected()) {
+      disableArm("Encoder Disconnect");
+    }
+
     if (enabled) {
       leader.set(pid.calculate(getEncoderAngle(), setpoint));
     }
@@ -142,13 +157,11 @@ public class ArmSubsystem extends SubsystemBase {
         extended = true;
       }
       else if (targetExtension == false) { //TODO: Add code for retraction limit switch, Add Time to Constants
-        extended = false;
+        extended = false;                  //      Use NEO Encoders for encoder sanity check.
       }
     }
 
     SmartDashboard.putNumber("Arm Angle", getEncoderAngle());
-    SmartDashboard.putNumber("Arm Motor Internal Encoder Value", leader.getEncoder().getPosition());
-
   }
 
 
