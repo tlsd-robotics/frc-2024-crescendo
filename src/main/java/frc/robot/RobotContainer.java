@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.HaltArmShooterIntake;
 import frc.robot.commands.Shooter.ShooterOn;
+import frc.robot.commands.Shooter.ShooterSpin;
 import frc.robot.commands.intake.IntakeDefaultCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -107,8 +108,7 @@ public class RobotContainer
     joy.getBottom().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
     controller.buttonA.onTrue(new HomeFunction(arm));
     controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));
-    controller.buttonB.onTrue(new InstantCommand(() -> {intakeShooter.setShooterSpeed(1);}));
-    controller.buttonB.onFalse(new InstantCommand(() -> {intakeShooter.setShooterSpeed(0);}));
+    controller.buttonB.whileTrue(new ShooterSpin(intakeShooter, 1));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

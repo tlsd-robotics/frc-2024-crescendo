@@ -24,7 +24,7 @@ public final class Constants
 {
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
+  public static final Matter CHASSIS    = new Matter(new Translation3d(Units.inchesToMeters(25), Units.inchesToMeters(20), Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
   public static final class Auton
@@ -96,8 +96,8 @@ public static final class Shooter
 
   public static final double MAX_RANGE = 2;
 
-  public static final double SHOOTER_KP  = 6e-5;
-  public static final double SHOOTER_KI  = 0;
+  public static final double SHOOTER_KP  = 6e-4;
+  public static final double SHOOTER_KI  = 0.00001;
   public static final double SHOOTER_KD  = 0; 
   public static final double SHOOTER_KIZ = 0;
   public static final double SHOOTER_KFF = 0.000015;

@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +38,8 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     shooter2.setInverted(false);
     shooter1.getEncoder().setVelocityConversionFactor(1);
     shooter2.getEncoder().setVelocityConversionFactor(1);
+    shooter1.setIdleMode(IdleMode.kBrake);
+    shooter2.setIdleMode(IdleMode.kBrake);
 
     shooter1PID = shooter1.getPIDController();
     shooter2PID = shooter2.getPIDController();
@@ -79,8 +82,14 @@ public class IntakeShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterSpeed(double speed) {
-    shooter1PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
-    shooter2PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
+    if (speed != 0) {
+      shooter1PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
+      shooter2PID.setReference(speed * Constants.Shooter.MAX_MOTOR_RPM, ControlType.kVelocity);
+    }
+    else {
+      shooter1.disable();
+      shooter2.disable();
+    }
     currentShooterSpeed = speed;
     SmartDashboard.putNumber("Shooter Speed: ", speed);
   }
