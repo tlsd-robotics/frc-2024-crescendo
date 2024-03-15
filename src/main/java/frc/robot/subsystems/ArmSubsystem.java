@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Arm;
 import frc.robot.commands.arm.ArmToAngle;
 import frc.robot.commands.arm.ArmToExtension;
 
@@ -61,8 +62,8 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(0.01, 0, 0);
-    pid.setTolerance(0.25);
+    pid = new PIDController(0.01, 0.005, 0.0003);
+    pid.setTolerance(3);
 
     SmartDashboard.putBoolean("Arm Enabled: ", false);
   }
@@ -125,12 +126,14 @@ public class ArmSubsystem extends SubsystemBase {
   public void setExtened(boolean extend) {
     if (enabled) {
       if(!extend){
-        if((setpoint > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES) && (getEncoderAngle() > Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)){
+        if((setpoint >= Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)){
           armExtender.set(DoubleSolenoid.Value.kReverse);
+          SmartDashboard.putString("Arm Extension: ", "Extended");
         }
       }
       else {
         armExtender.set(DoubleSolenoid.Value.kForward);
+        SmartDashboard.putString("Arm Extension: ", "Extended");
       }
       targetExtension = extend;
       extensionTimer.reset();
@@ -157,7 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
       leader.set(pid.calculate(getEncoderAngle(), setpoint));
     }
     if (targetExtension != extended) {
-      if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > 1))) {
+      if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > .5))) {
         extended = true;
       }
       else if (targetExtension == false) { //TODO: Add code for retraction limit switch, Add Time to Constants
@@ -166,6 +169,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     SmartDashboard.putNumber("Arm Angle", getEncoderAngle());
+    SmartDashboard.putBoolean("Reported Arm Extension: ", extended);
   }
 
 
@@ -185,14 +189,14 @@ public class ArmSubsystem extends SubsystemBase {
     SequentialCommandGroup command = new SequentialCommandGroup();
 
     if (targetExtension != extended) 
-      command.addCommands(new ArmToExtension(extended, this)); //Ensure subsequent commands to not start with the arm between two extension states
+      command.addCommands(new ArmToExtension(targetExtension, this)); //Ensure subsequent commands to not start with the arm between two extension states
                                                                //because this could result in the safeties ignoring angle commands in some cases. 
     
     if (!armAtSetpoint())
       command.addCommands(new ArmToAngle(getEncoderAngle(), this)); //For similar reasons stop the arm if it is not currently at its setpoint.
                                                    
 
-    if (setpoint.angleDegrees < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES) { // If setpoint is below home position
+    /*if (setpoint.angleDegrees < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES) { // If setpoint is below home position
       if (setpoint.extended && (setpoint.angleDegrees > Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES)) { //Setpoint must then be extended, and not below absolute minimum angle
         if (targetExtension) { //If the arm is currently extended
           if (getEncoderAngle() > Constants.Arm.ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES) { //If the arm needs to travel a long distance retract the intake to avoid swinging its large weight
@@ -205,7 +209,7 @@ public class ArmSubsystem extends SubsystemBase {
             command.addCommands(new ArmToAngle(setpoint.angleDegrees, this)); //Command arm to final angle
           }
         }
-        else { //the arm is currently retracted
+        else { //the arm is currently retracted //LOOK HERE
           command.addCommands(new ArmToAngle(Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES + Constants.Arm.RETRACTED_ANGLULAR_LIMIT_SAFETY_DEGREES, this)); //Command the arm to an angle a bit above home (//TODO: May or may not be a desirable behavior when the angle is already below safety margin of home)
           command.addCommands(new ArmToExtension(true, this)); //Command the arm to extend
           command.addCommands(new ArmToAngle(setpoint.angleDegrees, this)); //Command arm to final angle
@@ -216,9 +220,12 @@ public class ArmSubsystem extends SubsystemBase {
         //TODO: Print Message and/or Throw runtime error.
       }
     }
-    else { //Setpoint is above home position
+    else { //Setpoint is above (or at) home position
       if (setpoint.angleDegrees < Constants.Arm.MAX_ANGLE_DEGREES) { //If angle is less than maximum possible
-        if (targetExtension && (Math.abs(getEncoderAngle() - setpoint.angleDegrees) > Constants.Arm.ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES)) { //if arm is currently extended and angular change requires retraction
+        if (targetExtension && (Math.abs(getEncoderAngle() - setpoint.angleDegrees) > Constants.Arm.ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES)) { //if arm is currently extended and angular change requires retraction  
+          if (getAngleSetpoint() < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES) {
+            command.addCommands(new ArmToAngle(Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES + Constants.Arm.RETRACTED_ANGLULAR_LIMIT_SAFETY_DEGREES, this));
+          }
           command.addCommands(new ArmToExtension(false, this)); //Command the arm to retract
         }
         command.addCommands(new ArmToAngle(setpoint.angleDegrees, this)); //Command arm to final angle
@@ -228,7 +235,32 @@ public class ArmSubsystem extends SubsystemBase {
         //SETPOINT IMPOSSIBLE
         //TODO: Print Message and/or Throw runtime error.
       }
+    }*/
+
+    boolean needsTravelRetraction = Math.abs(getAngleSetpoint() - setpoint.angleDegrees) > Constants.Arm.ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES;
+    boolean canRetract = getAngleSetpoint() >= Arm.MIN_ANGLE_RETRACTED_DEGREES;
+    boolean setpointBelowHome = setpoint.angleDegrees < Arm.MIN_ANGLE_RETRACTED_DEGREES;
+
+    if ((needsTravelRetraction || !setpoint.extended) && canRetract) {
+      command.addCommands(new ArmToExtension(false, this));
     }
+    else if ((needsTravelRetraction || !setpoint.extended) && !canRetract) {
+      command.addCommands(new ArmToAngle(Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES, this));
+      command.addCommands(new ArmToExtension(false, this));
+    }
+
+    if (setpointBelowHome) {
+      if (!targetExtension || needsTravelRetraction) {
+        command.addCommands(new ArmToAngle(Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES, this));
+        command.addCommands(new ArmToExtension(true, this));
+      }
+      command.addCommands(new ArmToAngle(setpoint.angleDegrees, this)); //Command arm to final angle
+    }
+    else {
+        command.addCommands(new ArmToAngle(setpoint.angleDegrees, this)); //Command arm to final angle
+        command.addCommands(new ArmToExtension(setpoint.extended, this)); //Command the arm to final extension
+    }
+
     return command;
   }
 

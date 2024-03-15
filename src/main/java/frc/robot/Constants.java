@@ -66,7 +66,7 @@ public static final class Arm
   public static final int ROTATIONSWITCH = 2;
 
   public static final double MAX_ANGLE_DEGREES = 95;
-  public static final double MIN_ANGLE_RETRACTED_DEGREES = 15;
+  public static final double MIN_ANGLE_RETRACTED_DEGREES = 17;
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
 
@@ -75,11 +75,11 @@ public static final class Arm
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
-  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(15, false);
+  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(18, false);
   public static final ArmSubsystem.Setpoint INTAKE               = new Setpoint(0, true);
   public static final ArmSubsystem.Setpoint SPEAKER              = new Setpoint(0, true);
   public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(85, true);
-  public static final ArmSubsystem.Setpoint DISENGAGE_SUPPORT    = new Setpoint(30, false);
+  public static final ArmSubsystem.Setpoint DISENGAGE_SUPPORT    = new Setpoint(50, false);
 }
 
 public static final class Shooter 
@@ -96,8 +96,8 @@ public static final class Shooter
 
   public static final double MAX_RANGE = 2;
 
-  public static final double SHOOTER_KP  = 6e-4;
-  public static final double SHOOTER_KI  = 0.00001;
+  public static final double SHOOTER_KP  = 3e-4;
+  public static final double SHOOTER_KI  = 0.000001;
   public static final double SHOOTER_KD  = 0; 
   public static final double SHOOTER_KIZ = 0;
   public static final double SHOOTER_KFF = 0.000015;
