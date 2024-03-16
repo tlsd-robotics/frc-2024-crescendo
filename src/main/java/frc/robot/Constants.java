@@ -72,6 +72,9 @@ public static final class Arm
 
   public static final double ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES = 30;
   public static final double RETRACTED_ANGLULAR_LIMIT_SAFETY_DEGREES = 5; //Amount above min retracted angle arm must extend before traveling to angles below during arm setpoint paths.
+
+  public static final double MAX_PROFILED_MOTION_VELOCITY_DEG_SEC = 60;
+  public static final double MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC = 90;
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE

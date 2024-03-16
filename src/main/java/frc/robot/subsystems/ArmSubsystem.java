@@ -18,6 +18,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -47,6 +49,13 @@ public class ArmSubsystem extends SubsystemBase {
     private boolean extended = false;
     private boolean targetExtension = false;
     private Timer extensionTimer = new Timer();
+    private boolean profiledMotionEnabled = false;
+    TrapezoidProfile armMotionProfile = new TrapezoidProfile(new Constraints(Constants.Arm.MAX_PROFILED_MOTION_VELOCITY_DEG_SEC, Constants.Arm.MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC));
+    TrapezoidProfile.State startState;
+    TrapezoidProfile.State endState;
+    Timer motionProfileTimer = new Timer();
+
+
   public ArmSubsystem() {
     enabled = false;
     leader = new CANSparkMax(Constants.Arm.LEADER_ID, MotorType.kBrushless);
@@ -79,7 +88,7 @@ public class ArmSubsystem extends SubsystemBase {
     return setpoint;
   }
 
-  public void setAngle(double angle) {
+  public void setAngle(double angle, boolean profiledMotionEnabled) {
 
     boolean isExtended = targetExtension;
 
@@ -87,19 +96,50 @@ public class ArmSubsystem extends SubsystemBase {
     boolean angleTooSmall = isExtended ? (angle < Constants.Arm.MIN_ANGLE_EXTENDED_DEGREES) : (angle < Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES);
 
     if (enabled) {
-      if(!angleTooLarge && !angleTooSmall) {
-        setpoint = angle;
+      if (profiledMotionEnabled) {
+        if (!angleTooLarge && !angleTooSmall) {
+          startState = new TrapezoidProfile.State(getEncoderAngle(), 0);
+          endState = new TrapezoidProfile.State(angle, 0);
+          this.profiledMotionEnabled = true;
+          motionProfileTimer.reset();
+          motionProfileTimer.start();
+          setpoint = angle;
+        }
+        else if (angleTooSmall && (angle > setpoint)) { //Allow setpoints that move closer to a safe angle if the current setpoint is unsafe
+          startState = new TrapezoidProfile.State(getEncoderAngle(), 0);
+          endState = new TrapezoidProfile.State(angle, 0);
+          this.profiledMotionEnabled = true;
+          motionProfileTimer.reset();
+          motionProfileTimer.start();
+          setpoint = angle;
+        }
+        else if (angleTooLarge && (angle < setpoint)) {
+          startState = new TrapezoidProfile.State(getEncoderAngle(), 0);
+          endState = new TrapezoidProfile.State(angle, 0);
+          this.profiledMotionEnabled = true;
+          motionProfileTimer.reset();
+          motionProfileTimer.start();
+          setpoint = angle;
+        }
       }
-      else if (angleTooSmall && (angle > setpoint)) { //Allow setpoints that move closer to a safe angle if the current setpoint is unsafe
-        setpoint = angle;
-      }
-      else if (angleTooLarge && (angle < setpoint)) {
-        setpoint = angle;
+      else {
+        if (!angleTooLarge && !angleTooSmall) {
+          setpoint = angle;
+        }
+        else if (angleTooSmall && (angle > setpoint)) { //Allow setpoints that move closer to a safe angle if the current setpoint is unsafe
+          setpoint = angle;
+        }
+        else if (angleTooLarge && (angle < setpoint)) {
+          setpoint = angle;
+        }
       }
     }
-
-
   }
+
+  public void setAngle(double angle) {
+    setAngle(angle, false);
+  }
+
   public void enableArm() {
     setpoint = getEncoderAngle(); // Prevents arm from unexpectedly snapping to a new position when it is first enabled
                                   // greatly contributing to finger safety.
@@ -160,16 +200,26 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     if (enabled) {
-      leader.set(pid.calculate(getEncoderAngle(), setpoint) + ff.calculate(0, 0, 0));
+      if (profiledMotionEnabled) {
+        TrapezoidProfile.State currentState = armMotionProfile.calculate(motionProfileTimer.get(), startState, endState);
+        leader.set(pid.calculate(currentState.position) + ff.calculate(Math.toRadians(currentState.position), Math.toRadians(currentState.velocity)));
+        if (armAtSetpoint()) {
+          profiledMotionEnabled = false;
+        }
+      }
+      else {
+        leader.set(pid.calculate(getEncoderAngle(), setpoint));
+      }
     }
     else {
       leader.set(0);
     }
     if (targetExtension != extended) {
-      if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > 5))) {
+      //if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > 2))) {
+      if (targetExtension && (extensionTimer.get() > 2)) {
         extended = true;
       }
-      else if ((targetExtension == false) && (extensionTimer.get() > 5)) { //TODO: Add code for retraction limit switch, Add Time to Constants
+      else if ((targetExtension == false) && (extensionTimer.get() > 2)) { //TODO: Add code for retraction limit switch, Add Time to Constants
         extended = false;                  //      Use NEO Encoders for encoder sanity check.
       }
     }
