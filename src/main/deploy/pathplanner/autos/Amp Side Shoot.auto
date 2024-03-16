@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8165885422679937,
+      "y": 6.6140808645253655
+    },
+    "rotation": 58.29857033049429
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootSequence"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side Leave Path"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

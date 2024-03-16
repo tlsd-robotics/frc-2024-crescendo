@@ -29,7 +29,7 @@ public class IntakeOn extends Command {
   public IntakeOn(IntakeShooterSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
-    this.speed = Constants.Intake.DEFAULT_SPEED;
+    this.speed = Constants.Shooter.DEFAULT_INTAKE_SPEED;
     addRequirements(intake);
   }
 

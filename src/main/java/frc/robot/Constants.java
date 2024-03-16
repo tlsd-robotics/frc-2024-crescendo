@@ -66,7 +66,7 @@ public static final class Arm
   public static final int ROTATIONSWITCH = 2;
 
   public static final double MAX_ANGLE_DEGREES = 95;
-  public static final double MIN_ANGLE_RETRACTED_DEGREES = 17;
+  public static final double MIN_ANGLE_RETRACTED_DEGREES = 21;
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
 
@@ -75,11 +75,11 @@ public static final class Arm
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
-  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(18, false);
+  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(21, false);
   public static final ArmSubsystem.Setpoint INTAKE               = new Setpoint(0, true);
   public static final ArmSubsystem.Setpoint SPEAKER              = new Setpoint(0, true);
-  public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(85, true);
-  public static final ArmSubsystem.Setpoint DISENGAGE_SUPPORT    = new Setpoint(50, false);
+  public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(95, true);
+  public static final ArmSubsystem.Setpoint DISENGAGE_SUPPORT    = new Setpoint(75, false);
 }
 
 public static final class Shooter 
@@ -88,15 +88,16 @@ public static final class Shooter
   public static final int SHOOTER_FOLLOWER_ID = 17;
 
   public static final double WHEEL_DIAMETER_INCHES = 4;
-  public static final double DEFAULT_SHOOT_SPEED = 1;
-  public static final double DEFAULT_INTAKE_SPEED = 1;
+  public static final double DEFAULT_SHOOT_SPEED = 0.7;
+  public static final double DEFAULT_INTAKE_SHOOT_SPEED = 1;
+  public static final double DEFAULT_INTAKE_SPEED = 0.6;
   public static final double DEFAULT_DELAY = 2;
 
   public static final double MAX_MOTOR_RPM = 5676;
 
   public static final double MAX_RANGE = 2;
 
-  public static final double SHOOTER_KP  = 3e-4;
+  public static final double SHOOTER_KP  = 5e-4;
   public static final double SHOOTER_KI  = 0.000001;
   public static final double SHOOTER_KD  = 0; 
   public static final double SHOOTER_KIZ = 0;
@@ -119,7 +120,7 @@ public static final class Intake
   public static final double WHEEL_DIAMETER_INCHES = 2;
   public static final double DEFAULT_SPEED = 0.25;
 
-  public static final double NOTE_EDGE = 250;
+  public static final double NOTE_EDGE = 110;
   public static final double NOTE_CENTER = 500;
 }
 

@@ -78,6 +78,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Color Sensor Proximity: ", sensor.getProximity());
   }
 
   public void setIntakeSpeed(double speed) {

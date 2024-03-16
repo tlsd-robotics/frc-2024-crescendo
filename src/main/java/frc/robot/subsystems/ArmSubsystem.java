@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -40,6 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput extensionSwitch;
     private DigitalInput rotationSwitch;
     private PIDController pid;
+    ArmFeedforward ff;
     private double setpoint;
     private boolean enabled = false;
     private boolean extended = false;
@@ -62,7 +64,8 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(0.01, 0.005, 0.0003);
+    pid = new PIDController(0.015, 0.005, 0.0007);
+    ff = new ArmFeedforward(0, 0, 0, 0);
     pid.setTolerance(3);
 
     SmartDashboard.putBoolean("Arm Enabled: ", false);
@@ -157,13 +160,16 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     if (enabled) {
-      leader.set(pid.calculate(getEncoderAngle(), setpoint));
+      leader.set(pid.calculate(getEncoderAngle(), setpoint) + ff.calculate(0, 0, 0));
+    }
+    else {
+      leader.set(0);
     }
     if (targetExtension != extended) {
-      if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > .5))) {
+      if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > 5))) {
         extended = true;
       }
-      else if (targetExtension == false) { //TODO: Add code for retraction limit switch, Add Time to Constants
+      else if ((targetExtension == false) && (extensionTimer.get() > 5)) { //TODO: Add code for retraction limit switch, Add Time to Constants
         extended = false;                  //      Use NEO Encoders for encoder sanity check.
       }
     }
@@ -174,8 +180,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 
   public static class Setpoint {
-    double angleDegrees;
-    boolean extended;
+    public double angleDegrees;
+    public boolean extended;
 
     public Setpoint(double angleDegrees, boolean extended) {
       this.angleDegrees = angleDegrees;

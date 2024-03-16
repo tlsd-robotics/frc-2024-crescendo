@@ -21,6 +21,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Setpoints;
 import frc.robot.commands.HaltArmShooterIntake;
 import frc.robot.commands.Shooter.ShooterOn;
+import frc.robot.commands.Shooter.ShooterOnOverride;
 import frc.robot.commands.Shooter.ShooterSpin;
 import frc.robot.commands.intake.IntakeDefaultCommand;
 import frc.robot.commands.intake.IntakeOn;
@@ -31,6 +32,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.arm.*;
+import frc.robot.commands.auto.group.AutoShootSequence;
 import frc.robot.commands.auto.individual.AutoShooterOn;
 import frc.robot.commands.auto.individual.SimpleAutoIntake;
 import frc.robot.commands.climber.ClimberSet;
@@ -101,9 +103,9 @@ public class RobotContainer
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Autonomous Chooser", autoChooser);
 
-    CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initalized: " + command.getName()));
-    CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));
-    CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finished: " + command.getName()));
+    //CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initalized: " + command.getName()));
+    //CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));
+    //CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finished: " + command.getName()));
 
   }
 
@@ -119,7 +121,7 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
-    joy.getTrigger().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
+    joy.getTrigger().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
     //joy.getBottom().whileTrue(new ParallelCommandGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)));
     joy.getBottom().whileTrue(new IntakeOn(intakeShooter));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock, drivebase)));
@@ -131,19 +133,19 @@ public class RobotContainer
     //controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));
     //controller.buttonB.whileTrue(new ShooterSpin(intakeShooter, 1));
 
-    controller.buttonA.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.HOME));
-    controller.buttonB.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
-    controller.buttonX.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.SPEAKER));
-    controller.buttonY.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
+    //controller.buttonA.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.HOME));
+    //controller.buttonB.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
+    //controller.buttonX.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.SPEAKER));
+    //controller.buttonY.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
+
+    controller.buttonA.whileTrue(new ArmToAngle(Constants.Setpoints.HOME.angleDegrees, arm));
+    controller.buttonB.whileTrue(new ArmToAngle(Constants.Setpoints.INTAKE.angleDegrees, arm));
+    controller.buttonX.whileTrue(new ArmToAngle(Constants.Setpoints.SPEAKER.angleDegrees, arm));
+    controller.buttonY.whileTrue(new ArmToAngle(Constants.Setpoints.AMP.angleDegrees, arm));
     
-    controller.getAxisTrigger(controller.rightTrigger, 0.9, true).whileTrue(new IntakeShooterSpin(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SPEED, Constants.Shooter.DEFAULT_INTAKE_SPEED * Constants.Shooter.INTAKE_RELATIVE_SPEED_RATIO));
-    controller.getAxisTrigger(controller.leftTrigger, 0.9, true).whileTrue(new ShooterOn(intakeShooter, 0, 0));
-    controller.buttonLB.whileTrue(new SequentialCommandGroup ( //Allows override of PID wait
-        new IntakeShooterSpin(intakeShooter, Constants.Shooter.DEFAULT_SHOOT_SPEED, 0),
-        new WaitCommand(1),
-        new IntakeShooterSpin(intakeShooter, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED)
-      )
-    );
+    controller.getAxisTrigger(controller.rightTrigger, 0.9, true).whileTrue(new IntakeShooterSpin(intakeShooter, 1, Constants.Shooter.DEFAULT_INTAKE_SPEED * Constants.Shooter.INTAKE_RELATIVE_SPEED_RATIO));
+    controller.getAxisTrigger(controller.leftTrigger, 0.9, true).whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
+    controller.buttonLB.whileTrue(new ShooterOnOverride(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
     controller.buttonRB.whileTrue(new IntakeOn(intakeShooter));
 
     controller.buttonBack.onTrue(new InstantCommand(arm::disableArm));
@@ -154,8 +156,9 @@ public class RobotContainer
     //Register commands for use in autonomous as follows:
     //NamedCommands.registerCommand("Name in Pathplanner", command);
     NamedCommands.registerCommand("SimpleAutoIntake", new SimpleAutoIntake(drivebase, intakeShooter, 0.1, 10));
-    NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(arm.GetArmToSetpointCommand(Setpoints.SPEAKER), new AutoShooterOn(intakeShooter, Constants.Shooter.DEFAULT_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED)));
+    NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(arm.GetArmToSetpointCommand(Setpoints.SPEAKER), new AutoShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED)));
     NamedCommands.registerCommand("ArmRetract", arm.GetArmToSetpointCommand(Setpoints.HOME));
+    NamedCommands.registerCommand("AutoShootSequence", new AutoShootSequence(intakeShooter, arm));
   }
 
   /**
@@ -168,7 +171,8 @@ public class RobotContainer
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("New Path", true);
     //return drivebase.getAutonomousCommand("New Path", true);
-    return new SequentialCommandGroup(arm.GetArmToSetpointCommand(Constants.Setpoints.DISENGAGE_SUPPORT), autoChooser.getSelected());
+    //return new SequentialCommandGroup(new ArmToAngle(Constants.Setpoints.DISENGAGE_SUPPORT.angleDegrees, arm), autoChooser.getSelected());
+    return autoChooser.getSelected();
   }
 
   public void setDriveMode()

@@ -33,8 +33,8 @@ public class IntakeShooterSpin extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeShooter.setIntakeSpeed(shooterSpeed);
-    intakeShooter.setShooterSpeed(intakeSpeed);
+    intakeShooter.setIntakeSpeed(intakeSpeed);
+    intakeShooter.setShooterSpeed(shooterSpeed);
   }
 
   // Called once the command ends or is interrupted.
