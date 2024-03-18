@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Util;
 import frc.robot.Constants.Arm;
 import frc.robot.commands.arm.ArmToAngle;
 import frc.robot.commands.arm.ArmToExtension;
@@ -73,8 +74,8 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(0.015, 0.005, 0.0007);
-    ff = new ArmFeedforward(0, 0, 0, 0);
+    pid = new PIDController(0.01, 0.005, 0.0007);
+    ff = new ArmFeedforward(0, 0.01, 0, 0);
     pid.setTolerance(3);
 
     SmartDashboard.putBoolean("Arm Enabled: ", false);
@@ -123,6 +124,7 @@ public class ArmSubsystem extends SubsystemBase {
         }
       }
       else {
+        this.profiledMotionEnabled = false;
         if (!angleTooLarge && !angleTooSmall) {
           setpoint = angle;
         }
@@ -144,6 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
     setpoint = getEncoderAngle(); // Prevents arm from unexpectedly snapping to a new position when it is first enabled
                                   // greatly contributing to finger safety.
     this. enabled = true;  
+    profiledMotionEnabled = false;
     SmartDashboard.putBoolean("Arm Enabled: ", true);
     SmartDashboard.putString("Arm Disable Reason: ", "NA");       
   }
@@ -189,7 +192,9 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean armAtSetpoint() {
-    return pid.atSetpoint();
+    //return pid.atSetpoint();
+    double currAngle = getEncoderAngle();
+    return Util.inRange(currAngle, currAngle + 3, currAngle - 3);
   }
 
   @Override
