@@ -103,11 +103,11 @@ public class RobotContainer
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Autonomous Chooser", autoChooser);
 
-    //CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initalized: " + command.getName()));
-    //CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));
-    //CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finished: " + command.getName()));
+    CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initalized: " + command.getName()));
+    CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));;
+    CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finished: " + command.getName()));
+  };
 
-  }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -171,8 +171,8 @@ public class RobotContainer
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("New Path", true);
     //return drivebase.getAutonomousCommand("New Path", true);
-    //return new SequentialCommandGroup(new ArmToAngle(Constants.Setpoints.DISENGAGE_SUPPORT.angleDegrees, arm), autoChooser.getSelected());
-    return autoChooser.getSelected();
+    return new SequentialCommandGroup(new ArmToAngle(Constants.Setpoints.DISENGAGE_SUPPORT.angleDegrees, arm), autoChooser.getSelected());
+    //return autoChooser.getSelected();
   }
 
   public void setDriveMode()

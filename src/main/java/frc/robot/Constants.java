@@ -55,7 +55,7 @@ public final class Constants
   
 public static final class Arm
 {
-  public static final double ENCODER_OFFSET = 33.8;
+  public static final double ENCODER_OFFSET = 43.8;
   public static final int LEADER_ID = 25;
   public static final int FOLLOWER_ID = 22;
   public static final int ENCODER_ID = 0;
@@ -73,8 +73,8 @@ public static final class Arm
   public static final double ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES = 30;
   public static final double RETRACTED_ANGLULAR_LIMIT_SAFETY_DEGREES = 5; //Amount above min retracted angle arm must extend before traveling to angles below during arm setpoint paths.
 
-  public static final double MAX_PROFILED_MOTION_VELOCITY_DEG_SEC = 40;
-  public static final double MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC = 40;
+  public static final double MAX_PROFILED_MOTION_VELOCITY_DEG_SEC = 20;
+  public static final double MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC = 10;
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
@@ -123,7 +123,7 @@ public static final class Intake
   public static final double WHEEL_DIAMETER_INCHES = 2;
   public static final double DEFAULT_SPEED = 0.25;
 
-  public static final double NOTE_EDGE = 110;
+  public static final double NOTE_EDGE = 120;
   public static final double NOTE_CENTER = 500;
 }
 

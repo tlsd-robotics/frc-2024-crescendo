@@ -44,17 +44,17 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput extensionSwitch;
     private DigitalInput rotationSwitch;
     private PIDController pid;
-    ArmFeedforward ff;
+    private ArmFeedforward ff;
     private double setpoint;
     private boolean enabled = false;
     private boolean extended = false;
     private boolean targetExtension = false;
     private Timer extensionTimer = new Timer();
     private boolean profiledMotionEnabled = false;
-    TrapezoidProfile armMotionProfile = new TrapezoidProfile(new Constraints(Constants.Arm.MAX_PROFILED_MOTION_VELOCITY_DEG_SEC, Constants.Arm.MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC));
-    TrapezoidProfile.State startState;
-    TrapezoidProfile.State endState;
-    Timer motionProfileTimer = new Timer();
+    private TrapezoidProfile armMotionProfile = new TrapezoidProfile(new Constraints(Constants.Arm.MAX_PROFILED_MOTION_VELOCITY_DEG_SEC, Constants.Arm.MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC));
+    private TrapezoidProfile.State startState;
+    private TrapezoidProfile.State endState;
+    private Timer motionProfileTimer = new Timer();
 
 
   public ArmSubsystem() {
@@ -74,8 +74,8 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(0.01, 0.005, 0.0007);
-    ff = new ArmFeedforward(0, 0.01, 0, 0);
+    pid = new PIDController(0.02, 0, 0);
+    ff = new ArmFeedforward(0, 0.2, 0.8, 0);
     pid.setTolerance(3);
 
     SmartDashboard.putBoolean("Arm Enabled: ", false);
@@ -98,23 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     if (enabled) {
       if (profiledMotionEnabled) {
-        if (!angleTooLarge && !angleTooSmall) {
-          startState = new TrapezoidProfile.State(getEncoderAngle(), 0);
-          endState = new TrapezoidProfile.State(angle, 0);
-          this.profiledMotionEnabled = true;
-          motionProfileTimer.reset();
-          motionProfileTimer.start();
-          setpoint = angle;
-        }
-        else if (angleTooSmall && (angle > setpoint)) { //Allow setpoints that move closer to a safe angle if the current setpoint is unsafe
-          startState = new TrapezoidProfile.State(getEncoderAngle(), 0);
-          endState = new TrapezoidProfile.State(angle, 0);
-          this.profiledMotionEnabled = true;
-          motionProfileTimer.reset();
-          motionProfileTimer.start();
-          setpoint = angle;
-        }
-        else if (angleTooLarge && (angle < setpoint)) {
+        if ((!angleTooLarge && !angleTooSmall) || (angleTooSmall && (angle > setpoint)) || (angleTooLarge && (angle < setpoint))) {
           startState = new TrapezoidProfile.State(getEncoderAngle(), 0);
           endState = new TrapezoidProfile.State(angle, 0);
           this.profiledMotionEnabled = true;
@@ -174,7 +158,7 @@ public class ArmSubsystem extends SubsystemBase {
       if(!extend){
         if((setpoint >= Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES)){
           armExtender.set(DoubleSolenoid.Value.kReverse);
-          SmartDashboard.putString("Arm Extension: ", "Extended");
+          SmartDashboard.putString("Arm Extension: ", "Retracted");
         }
       }
       else {
@@ -182,6 +166,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putString("Arm Extension: ", "Extended");
       }
       targetExtension = extend;
+      extended = !targetExtension;
       extensionTimer.reset();
       extensionTimer.start();
     }
@@ -207,13 +192,13 @@ public class ArmSubsystem extends SubsystemBase {
     if (enabled) {
       if (profiledMotionEnabled) {
         TrapezoidProfile.State currentState = armMotionProfile.calculate(motionProfileTimer.get(), startState, endState);
-        leader.set(pid.calculate(currentState.position) + ff.calculate(Math.toRadians(currentState.position), Math.toRadians(currentState.velocity)));
+        leader.set(pid.calculate(getEncoderAngle(), currentState.position) + ff.calculate(Math.toRadians(currentState.position), Math.toRadians(currentState.velocity)));
         if (armAtSetpoint()) {
           profiledMotionEnabled = false;
         }
       }
       else {
-        leader.set(pid.calculate(getEncoderAngle(), setpoint));
+        leader.set(pid.calculate(getEncoderAngle(), setpoint) + ff.calculate(Math.toRadians(setpoint), 0));
       }
     }
     else {
@@ -224,7 +209,7 @@ public class ArmSubsystem extends SubsystemBase {
       if (targetExtension && (extensionTimer.get() > 2)) {
         extended = true;
       }
-      else if ((targetExtension == false) && (extensionTimer.get() > 2)) { //TODO: Add code for retraction limit switch, Add Time to Constants
+      else if (!targetExtension && (extensionTimer.get() > 2)) { //TODO: Add code for retraction limit switch, Add Time to Constants
         extended = false;                  //      Use NEO Encoders for encoder sanity check.
       }
     }
