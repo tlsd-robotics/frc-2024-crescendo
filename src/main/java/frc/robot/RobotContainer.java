@@ -83,19 +83,19 @@ public class RobotContainer
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
         () -> MathUtil.applyDeadband(-joy.getRawY(), OperatorConstants.Y_DEADBAND),
         () -> MathUtil.applyDeadband(-joy.getRawX(), OperatorConstants.X_DEADBAND),
-        () -> -joy.getRawZ() * 0.9);
+        () -> -joy.getRawZ() * 0.95);
 
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
         () -> MathUtil.applyDeadband(joy.getRawY(), OperatorConstants.Y_DEADBAND),
         () -> MathUtil.applyDeadband(joy.getRawX(), OperatorConstants.X_DEADBAND),
-        () -> joy.getRawZ() * 0.9);
+        () -> joy.getRawZ() * 0.95);
 
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
 
-    arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0.02, true), controller.getDPadRight(), controller.getDPadLeft(), arm));
+    arm.setDefaultCommand(new DefaultArmCommand(controller.getAxisSupplier(controller.leftYAxis, false, 0.04, true), controller.getDPadRight(), controller.getDPadLeft(), arm));
     //arm.setDefaultCommand(new DefaultArmCommand(controller::getLeftYAxis, controller.buttonB, controller.buttonX, arm));
-    intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller.getAxisSupplier(controller.rightXAxis, false, 0.02, true), intakeShooter));
+    intakeShooter.setDefaultCommand(new IntakeDefaultCommand(controller.getAxisSupplier(controller.rightXAxis, false, 0.04, true), intakeShooter));
     climber.setDefaultCommand(new DefaultClimberCommand(controller.dPadUp, controller.dPadDown, climber));
 
     //Creates a sendable chooser using all autos paths in roborio delploy folder. See:
@@ -122,8 +122,8 @@ public class RobotContainer
     //joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
     joy.getTrigger().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
-    //joy.getBottom().whileTrue(new ParallelCommandGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)));
-    joy.getBottom().whileTrue(new IntakeOn(intakeShooter));
+    joy.getBottom().whileTrue(new ParallelCommandGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)));
+    //joy.getBottom().whileTrue(new IntakeOn(intakeShooter));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock, drivebase)));
     joy.getLeft().onTrue((new InstantCommand(drivebase::zeroGyro)));
     joy.POVUp.onTrue(new ClimberSet(true, climber));
@@ -133,15 +133,15 @@ public class RobotContainer
     //controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));
     //controller.buttonB.whileTrue(new ShooterSpin(intakeShooter, 1));
 
-    //controller.buttonA.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.HOME));
-    //controller.buttonB.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
-    //controller.buttonX.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.SPEAKER));
-    //controller.buttonY.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
+    controller.buttonA.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.HOME));
+    controller.buttonB.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.INTAKE));
+    controller.buttonX.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.SPEAKER));
+    controller.buttonY.whileTrue(arm.GetArmToSetpointCommand(Constants.Setpoints.AMP));
 
-    controller.buttonA.whileTrue(new ArmToAngle(Constants.Setpoints.HOME.angleDegrees, arm));
-    controller.buttonB.whileTrue(new ArmToAngle(Constants.Setpoints.INTAKE.angleDegrees, arm));
-    controller.buttonX.whileTrue(new ArmToAngle(Constants.Setpoints.SPEAKER.angleDegrees, arm));
-    controller.buttonY.whileTrue(new ArmToAngle(Constants.Setpoints.AMP.angleDegrees, arm));
+   //controller.buttonA.whileTrue(new ArmToAngle(Constants.Setpoints.HOME.angleDegrees, arm));
+   //controller.buttonB.whileTrue(new ArmToAngle(Constants.Setpoints.INTAKE.angleDegrees, arm));
+   //controller.buttonX.whileTrue(new ArmToAngle(Constants.Setpoints.SPEAKER.angleDegrees, arm));
+   //controller.buttonY.whileTrue(new ArmToAngle(Constants.Setpoints.AMP.angleDegrees, arm));
     
     controller.getAxisTrigger(controller.rightTrigger, 0.9, true).whileTrue(new IntakeShooterSpin(intakeShooter, 1, Constants.Shooter.DEFAULT_INTAKE_SPEED * Constants.Shooter.INTAKE_RELATIVE_SPEED_RATIO));
     controller.getAxisTrigger(controller.leftTrigger, 0.9, true).whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));

@@ -74,9 +74,9 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(0.02, 0, 0);
-    ff = new ArmFeedforward(0, 0.2, 0.8, 0);
-    pid.setTolerance(3);
+    pid = new PIDController(0.02, 0.005, 0);
+    ff = new ArmFeedforward(0, 0.17, 0.8, 0);
+    pid.setTolerance(2);
 
     SmartDashboard.putBoolean("Arm Enabled: ", false);
   }

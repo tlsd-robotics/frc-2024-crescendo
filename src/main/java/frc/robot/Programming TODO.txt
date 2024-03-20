@@ -48,16 +48,13 @@ LOW PRIORITY:
 - [ ] Rate based dynamic arm control (could allow for faster movements)?
 
 
+IMPORTANT CHANGES!!!!!!!!!!:
 
-Testing:
+[ ] Vision Tracking Field Oriented
 
-[ ] Run Intake / Shooter
+[ ] Auto Reverse Intake
 
-[ ] Setpoints
+[ ] Debug Arm Setpoints
 
-[ ] Drive
-
-[ ] Map Controls
-
-[ ] Basic Auto
+[ ] Debug Weird Arm Mode Transition Setpoints
 

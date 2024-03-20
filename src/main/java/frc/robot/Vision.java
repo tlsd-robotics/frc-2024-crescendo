@@ -17,8 +17,8 @@ import edu.wpi.first.math.util.Units;
 
 public  class Vision {
     //================== Cameras ========================
-    public static PhotonCamera shooterCam = new PhotonCamera("topUsb");
-    public static PhotonCamera intakeCam = new PhotonCamera("bottomUsb");
+    public static PhotonCamera shooterCam = new PhotonCamera("TopUsb");
+    public static PhotonCamera intakeCam = new PhotonCamera("BottomUsb");
 
     //==================== Targets ==========================
     public static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();

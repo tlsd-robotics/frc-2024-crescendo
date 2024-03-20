@@ -66,22 +66,22 @@ public static final class Arm
   public static final int ROTATIONSWITCH = 2;
 
   public static final double MAX_ANGLE_DEGREES = 95;
-  public static final double MIN_ANGLE_RETRACTED_DEGREES = 21;
+  public static final double MIN_ANGLE_RETRACTED_DEGREES = 17;
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
 
   public static final double ANGULAR_CHANGE_RETRACTION_THRESHOLD_DEGREES = 30;
   public static final double RETRACTED_ANGLULAR_LIMIT_SAFETY_DEGREES = 5; //Amount above min retracted angle arm must extend before traveling to angles below during arm setpoint paths.
 
-  public static final double MAX_PROFILED_MOTION_VELOCITY_DEG_SEC = 20;
-  public static final double MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC = 10;
+  public static final double MAX_PROFILED_MOTION_VELOCITY_DEG_SEC = 40;
+  public static final double MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC = 17;
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
-  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(21, false);
+  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(17, false);
   public static final ArmSubsystem.Setpoint INTAKE               = new Setpoint(0, true);
   public static final ArmSubsystem.Setpoint SPEAKER              = new Setpoint(0, true);
-  public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(95, true);
+  public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(90, true);
   public static final ArmSubsystem.Setpoint DISENGAGE_SUPPORT    = new Setpoint(75, false);
 }
 
@@ -93,7 +93,7 @@ public static final class Shooter
   public static final double WHEEL_DIAMETER_INCHES = 4;
   public static final double DEFAULT_SHOOT_SPEED = 0.7;
   public static final double DEFAULT_INTAKE_SHOOT_SPEED = 1;
-  public static final double DEFAULT_INTAKE_SPEED = 0.6;
+  public static final double DEFAULT_INTAKE_SPEED = 1;
   public static final double DEFAULT_DELAY = 2;
 
   public static final double MAX_MOTOR_RPM = 5676;
@@ -123,7 +123,7 @@ public static final class Intake
   public static final double WHEEL_DIAMETER_INCHES = 2;
   public static final double DEFAULT_SPEED = 0.25;
 
-  public static final double NOTE_EDGE = 120;
+  public static final double NOTE_EDGE = 150;
   public static final double NOTE_CENTER = 500;
 }
 
@@ -144,7 +144,7 @@ public static final class Vision
   public static final Translation3d ROBOT_TO_CAM_TRANSLATION = new Translation3d(0.5, 0.0, 0.0); // X = forward, Y = left, Z = up
   public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, 0.0, 0.0);
 
-  public static final double INTAKE_SETPOINT = -20.0;
+  public static final double INTAKE_SETPOINT = -14.0;
 }
 }
 
