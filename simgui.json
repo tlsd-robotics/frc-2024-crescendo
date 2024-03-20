@@ -65,6 +65,7 @@
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/Pigeon 2 [13]": "Gyro",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Autonomous Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pigeon 2 (v6) [13]": "Gyro",
       "/SmartDashboard/Pigeon 2 [13]": "Gyro",
@@ -91,12 +92,11 @@
           "arrowWeight": 3.0,
           "style": "Hidden"
         },
-        "bottom": 544,
-        "builtin": "2024 Crescendo",
-        "height": 8.013679504394531,
-        "left": 46,
-        "right": 1088,
-        "top": 36,
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -107,7 +107,7 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "Field": {
+        "Autonomous Chooser": {
           "open": true
         },
         "open": true,

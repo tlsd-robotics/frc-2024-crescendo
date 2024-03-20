@@ -48,4 +48,15 @@ public  class Vision {
         return distance;
 
     }
+
+    //======================== Calculate Distance from Target ===========================
+    public static double getDistanceFromTarget(PhotonTrackedTarget target) {
+        Transform3d t = target.getBestCameraToTarget();
+
+        return Math.sqrt(
+            Math.pow(t.getX(), 2) +
+            Math.pow(t.getY(), 2) +
+            Math.pow(t.getZ(), 2)
+        );
+    }
 }
