@@ -147,7 +147,7 @@ public static final class Vision
   public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(44.5), 0.0);
 
   public static final double INTAKE_SETPOINT = -14.0;
-public static final double OPTIMAL_SHOOTER_DISTANCE = 0.14; // Area% * 0.01
+public static final double OPTIMAL_SHOOTER_DISTANCE = 0.0;
 }
 }
 
