@@ -28,7 +28,7 @@ public class ArmToShooterAngle extends Command {
       var target = results.getBestTarget();
 
       if (results.hasTargets()) {
-        arm.setAngle(Vision.getDistanceFromTag(target));
+        arm.setAngle(Vision.getDistanceTesting(target));
       }
     }   
     // Called every time the scheduler runs while the command is scheduled.

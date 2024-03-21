@@ -29,6 +29,7 @@ import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.intake.IntakeShooterSpin;
 import frc.robot.commands.intake.TimedIntakeShooterSpin;
 import frc.robot.commands.vision.AimIntake;
+import frc.robot.commands.vision.AimShooter;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeShooterSubsystem;
@@ -133,6 +134,7 @@ public class RobotContainer
     joy.getLeft().onTrue((new InstantCommand(drivebase::zeroGyro)));
     joy.POVUp.onTrue(new ClimberSet(true, climber));
     joy.POVDown.onTrue(new ClimberSet(false, climber));
+    joy.POVRight.whileTrue(new AimShooter(drivebase, joy, 0.25));
 
     //controller.buttonA.onTrue(new HomeFunction(arm));
     //controller.buttonA.onFalse(new HaltArmShooterIntake(intakeShooter, arm));

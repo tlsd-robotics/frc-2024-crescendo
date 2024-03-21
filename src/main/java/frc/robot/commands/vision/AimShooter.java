@@ -11,6 +11,7 @@ import TLsdLibrary.Controllers.T16000M;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Vision;
@@ -56,10 +57,11 @@ public class AimShooter extends Command {
         MathUtil.applyDeadband(-joy.getRawX(), OperatorConstants.X_DEADBAND),
         pidZ.calculate(target.getYaw(), 0)
       ));
+      
+      SmartDashboard.putNumber("Distance To Target: ", Vision.getDistancePoseTest(target));
+      SmartDashboard.putNumber("Angle from Distance: ", Vision.getAngleFromDistance(Vision.getDistanceTesting(target)));
 
-      SmartDashboard.putNumber("Distance Trig: ", Vision.getDistanceFromTag(target));
-      SmartDashboard.putNumber("Distance Tag: ", Vision.getDistanceFromTarget(target));
-    } else{
+      } else{
       drive.driveFieldOriented(new ChassisSpeeds(
         MathUtil.applyDeadband(-joy.getRawY(), OperatorConstants.Y_DEADBAND),
         MathUtil.applyDeadband(-joy.getRawX(), OperatorConstants.X_DEADBAND),

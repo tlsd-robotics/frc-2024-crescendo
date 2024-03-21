@@ -144,7 +144,7 @@ public static final class Superstructure
 public static final class Vision 
 {
   public static final Translation3d ROBOT_TO_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(11.5), 0.0, Units.inchesToMeters(4)); // X = forward, Y = left, Z = up
-  public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(5), 0.0);
+  public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(44.5), 0.0);
 
   public static final double INTAKE_SETPOINT = -14.0;
 }

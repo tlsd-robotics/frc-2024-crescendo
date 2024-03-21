@@ -54,7 +54,7 @@ public class AutoAimShooter extends Command {
 
     if (results.hasTargets()){   
       PhotonTrackedTarget target = results.getBestTarget();
-      distance = Vision.getDistanceFromTag(target);
+      distance = Vision.getDistanceTesting(target);
       
       drive.drive(new ChassisSpeeds(
         getPidDistanceValue(distance), 
