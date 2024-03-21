@@ -38,7 +38,7 @@ public class AimIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidZ = new PIDController(0.05, 0, 0);
+    pidZ = new PIDController(0.2, 0, 0);
     pidZ.setTolerance(tolerance);
   }
 

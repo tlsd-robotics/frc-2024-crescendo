@@ -57,7 +57,7 @@ public static final class Arm
 {
   public static final double ENCODER_OFFSET = 43.8;
   public static final int LEADER_ID = 25;
-  public static final int FOLLOWER_ID = 22;
+  public static final int FOLLOWER_ID = 15;
   public static final int ENCODER_ID = 0;
   public static final int PNEUMATICS_MODULE_ID = 2;
   public static final int FORWARD_CHANNEL = 3;
@@ -66,7 +66,7 @@ public static final class Arm
   public static final int ROTATIONSWITCH = 2;
 
   public static final double MAX_ANGLE_DEGREES = 95;
-  public static final double MIN_ANGLE_RETRACTED_DEGREES = 17;
+  public static final double MIN_ANGLE_RETRACTED_DEGREES = 15;
   public static final double MIN_ANGLE_EXTENDED_DEGREES = 0;
   public static final double MAX_MANUAL_ROTATION_RATE_DEGREES_SEC = 40;
 
@@ -75,10 +75,12 @@ public static final class Arm
 
   public static final double MAX_PROFILED_MOTION_VELOCITY_DEG_SEC = 40;
   public static final double MAX_PROFILED_MOTION_ACCELERATION_DEG_SEC_SEC = 17;
+
+  public static final double ANGLE_TOLERANCE_DEGREEES = 4;
 }
 
 public static final class Setpoints { //TODO: PLACEHOLDER VALUES, TEST AND REPLACE
-  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(17, false);
+  public static final ArmSubsystem.Setpoint HOME                 = new Setpoint(15, false);
   public static final ArmSubsystem.Setpoint INTAKE               = new Setpoint(0, true);
   public static final ArmSubsystem.Setpoint SPEAKER              = new Setpoint(0, true);
   public static final ArmSubsystem.Setpoint AMP                  = new Setpoint(90, true);
@@ -141,8 +143,8 @@ public static final class Superstructure
 
 public static final class Vision 
 {
-  public static final Translation3d ROBOT_TO_CAM_TRANSLATION = new Translation3d(0.5, 0.0, 0.0); // X = forward, Y = left, Z = up
-  public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, 0.0, 0.0);
+  public static final Translation3d ROBOT_TO_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(11.5), 0.0, Units.inchesToMeters(4)); // X = forward, Y = left, Z = up
+  public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(5), 0.0);
 
   public static final double INTAKE_SETPOINT = -14.0;
 }

@@ -74,9 +74,9 @@ public class ArmSubsystem extends SubsystemBase {
     extensionSwitch = new DigitalInput(Constants.Arm.EXTENSIONSWITCH);
     rotationSwitch = new DigitalInput(Constants.Arm.ROTATIONSWITCH);
 
-    pid = new PIDController(0.02, 0.005, 0);
+    pid = new PIDController(0.015, 0.007, 0);
     ff = new ArmFeedforward(0, 0.17, 0.8, 0);
-    pid.setTolerance(2);
+    pid.setTolerance(Constants.Arm.ANGLE_TOLERANCE_DEGREEES);
 
     SmartDashboard.putBoolean("Arm Enabled: ", false);
   }
@@ -120,6 +120,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
       }
     }
+
+    SmartDashboard.putNumber("Arm Setpoint", setpoint);
   }
 
   public void setAngle(double angle) {
@@ -166,7 +168,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putString("Arm Extension: ", "Extended");
       }
       targetExtension = extend;
-      extended = !targetExtension;
+      //extended = !targetExtension;
       extensionTimer.reset();
       extensionTimer.start();
     }
@@ -179,7 +181,7 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean armAtSetpoint() {
     //return pid.atSetpoint();
     double currAngle = getEncoderAngle();
-    return Util.inRange(currAngle, currAngle + 3, currAngle - 3);
+    return Util.inRange(currAngle, setpoint - Constants.Arm.ANGLE_TOLERANCE_DEGREEES, setpoint + Constants.Arm.ANGLE_TOLERANCE_DEGREEES);
   }
 
   @Override
@@ -193,6 +195,8 @@ public class ArmSubsystem extends SubsystemBase {
       if (profiledMotionEnabled) {
         TrapezoidProfile.State currentState = armMotionProfile.calculate(motionProfileTimer.get(), startState, endState);
         leader.set(pid.calculate(getEncoderAngle(), currentState.position) + ff.calculate(Math.toRadians(currentState.position), Math.toRadians(currentState.velocity)));
+        SmartDashboard.putNumber("MP Angle", currentState.position);
+        SmartDashboard.putNumber("MP Velocity", currentState.velocity);
         if (armAtSetpoint()) {
           profiledMotionEnabled = false;
         }
@@ -206,15 +210,16 @@ public class ArmSubsystem extends SubsystemBase {
     }
     if (targetExtension != extended) {
       //if (targetExtension && (extensionSwitch.get() || (extensionTimer.get() > 2))) {
-      if (targetExtension && (extensionTimer.get() > 2)) {
+      if (targetExtension && (extensionTimer.get() > 1)) {
         extended = true;
       }
-      else if (!targetExtension && (extensionTimer.get() > 2)) { //TODO: Add code for retraction limit switch, Add Time to Constants
+      else if (!targetExtension && (extensionTimer.get() > 1)) { //TODO: Add code for retraction limit switch, Add Time to Constants
         extended = false;                  //      Use NEO Encoders for encoder sanity check.
       }
     }
 
     SmartDashboard.putNumber("Arm Angle", getEncoderAngle());
+    SmartDashboard.putBoolean("Arm At Setpoint", armAtSetpoint());
     SmartDashboard.putBoolean("Reported Arm Extension: ", extended);
   }
 
@@ -296,10 +301,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     if (setpointBelowHome) {
-      if (!targetExtension || needsTravelRetraction) {
-        command.addCommands(new ArmToAngle(Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES, this));
-        command.addCommands(new ArmToExtension(true, this));
-      }
+      command.addCommands(new ArmToAngle(Constants.Arm.MIN_ANGLE_RETRACTED_DEGREES, this));
+      command.addCommands(new ArmToExtension(setpoint.extended, this));
       command.addCommands(new ArmToAngle(setpoint.angleDegrees, this)); //Command arm to final angle
     }
     else {

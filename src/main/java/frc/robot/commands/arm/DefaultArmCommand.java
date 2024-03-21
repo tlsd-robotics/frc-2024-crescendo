@@ -46,8 +46,6 @@ public class DefaultArmCommand extends Command {
   public void execute() {
     
     arm.setAngle(arm.getAngleSetpoint() + rotationInput.getAsDouble() * Constants.Arm.MAX_MANUAL_ROTATION_RATE_DEGREES_SEC * timer.get());
-    SmartDashboard.putNumber("Arm Setpoint", arm.getAngleSetpoint());
-    SmartDashboard.putNumber("Arm Rotation Input", rotationInput.getAsDouble());
     timer.reset();
 
     if(extend.getAsBoolean()) {

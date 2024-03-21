@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,6 +27,7 @@ import frc.robot.commands.Shooter.ShooterSpin;
 import frc.robot.commands.intake.IntakeDefaultCommand;
 import frc.robot.commands.intake.IntakeOn;
 import frc.robot.commands.intake.IntakeShooterSpin;
+import frc.robot.commands.intake.TimedIntakeShooterSpin;
 import frc.robot.commands.vision.AimIntake;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -103,9 +105,9 @@ public class RobotContainer
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Autonomous Chooser", autoChooser);
 
-    CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initalized: " + command.getName()));
-    CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));;
-    CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finished: " + command.getName()));
+    //CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initalized: " + command.getName()));
+    //CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));;
+    //CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finished: " + command.getName()));
   };
 
 
@@ -122,7 +124,10 @@ public class RobotContainer
     //joy.getLeft().onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
     joy.getTrigger().whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
-    joy.getBottom().whileTrue(new ParallelCommandGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)));
+    joy.getBottom().whileTrue(new SequentialCommandGroup(
+      new ParallelRaceGroup(new AimIntake(drivebase, joy, 3), new IntakeOn(intakeShooter)), 
+      new TimedIntakeShooterSpin(intakeShooter, -1, 0, 0.1)
+    ));
     //joy.getBottom().whileTrue(new IntakeOn(intakeShooter));
     joy.getRight().onTrue((new InstantCommand(drivebase::lock, drivebase)));
     joy.getLeft().onTrue((new InstantCommand(drivebase::zeroGyro)));
@@ -146,8 +151,10 @@ public class RobotContainer
     controller.getAxisTrigger(controller.rightTrigger, 0.9, true).whileTrue(new IntakeShooterSpin(intakeShooter, 1, Constants.Shooter.DEFAULT_INTAKE_SPEED * Constants.Shooter.INTAKE_RELATIVE_SPEED_RATIO));
     controller.getAxisTrigger(controller.leftTrigger, 0.9, true).whileTrue(new ShooterOn(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
     controller.buttonLB.whileTrue(new ShooterOnOverride(intakeShooter, Constants.Shooter.DEFAULT_INTAKE_SHOOT_SPEED, Constants.Shooter.DEFAULT_SHOOT_SPEED));
-    controller.buttonRB.whileTrue(new IntakeOn(intakeShooter));
-
+    controller.buttonRB.whileTrue(
+      new SequentialCommandGroup(new IntakeOn(intakeShooter), 
+      new TimedIntakeShooterSpin(intakeShooter, -1, 0, 0.1))
+    );
     controller.buttonBack.onTrue(new InstantCommand(arm::disableArm));
     controller.buttonStart.onTrue(new InstantCommand(arm::enableArm));
   }
@@ -197,6 +204,6 @@ public class RobotContainer
 
   //called when robot is disabled
   public void onDisable() {
-    arm.disableArm();
+    arm.disableArm("BOT DISABLE");
   }
 }

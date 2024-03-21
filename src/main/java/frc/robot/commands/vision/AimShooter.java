@@ -57,7 +57,8 @@ public class AimShooter extends Command {
         pidZ.calculate(target.getYaw(), 0)
       ));
 
-      SmartDashboard.putNumber("Distance", Vision.getDistanceFromTag(target));
+      SmartDashboard.putNumber("Distance Trig: ", Vision.getDistanceFromTag(target));
+      SmartDashboard.putNumber("Distance Tag: ", Vision.getDistanceFromTarget(target));
     } else{
       drive.driveFieldOriented(new ChassisSpeeds(
         MathUtil.applyDeadband(-joy.getRawY(), OperatorConstants.Y_DEADBAND),
