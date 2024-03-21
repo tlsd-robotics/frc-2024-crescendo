@@ -100,7 +100,7 @@ public static final class Shooter
 
   public static final double MAX_MOTOR_RPM = 5676;
 
-  public static final double MAX_RANGE = 2;
+  public static final double MAX_RANGE_AREA = 0.14;
 
   public static final double SHOOTER_KP  = 5e-4;
   public static final double SHOOTER_KI  = 0.000001;
@@ -147,6 +147,7 @@ public static final class Vision
   public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(44.5), 0.0);
 
   public static final double INTAKE_SETPOINT = -14.0;
+public static final double OPTIMAL_SHOOTER_DISTANCE = 0.14; // Area% * 0.01
 }
 }
 

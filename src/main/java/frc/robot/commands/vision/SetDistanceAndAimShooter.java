@@ -2,49 +2,49 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.auto.individual;
+package frc.robot.commands.vision;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import TLsdLibrary.Controllers.T16000M;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Vision;
-import frc.robot.subsystems.IntakeShooterSubsystem;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class AutoAimShooter extends Command {
+public class SetDistanceAndAimShooter extends Command {
   SwerveSubsystem drive;
-  IntakeShooterSubsystem shooter;
-  PIDController pidY, pidZ;
-  double tolerance, distance;
+  PIDController pidX, pidZ;
+  T16000M joy;
+  double tolerance;
   PhotonCamera cam;
-  boolean safeDistance;
 
   /** Creates a new LiningUp. */
-  public AutoAimShooter(SwerveSubsystem DriveTrain, IntakeShooterSubsystem shooter, double Tolerance) {
+  public SetDistanceAndAimShooter(SwerveSubsystem DriveTrain, T16000M joy, double Tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = DriveTrain;
+    this.joy = joy;
     this.tolerance = Tolerance;
-    this.shooter = shooter;
 
     this.cam = Vision.shooterCam;
 
-    addRequirements(DriveTrain, shooter);
+    addRequirements(DriveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidZ = new PIDController(0.05, 0, 0);
-    pidY = new PIDController(0.05, 0, 0);
+    pidZ = new PIDController(0.075, 0, 0);
     pidZ.setTolerance(tolerance);
-    pidY.setTolerance(tolerance);
 
-    safeDistance = false;
+    pidX = new PIDController(0.075, 0, 0);
+    pidX.setTolerance(tolerance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,25 +53,22 @@ public class AutoAimShooter extends Command {
     PhotonPipelineResult results = cam.getLatestResult();
 
     if (results.hasTargets()){   
-      PhotonTrackedTarget target = results.getBestTarget();
+      PhotonTrackedTarget target = Vision.filterResults(results);
       
-      drive.drive(new ChassisSpeeds(
-        getPidDistanceValue(target.getArea()), 
-        0.0,
-        pidZ.calculate(target.getYaw(), 0)
+      drive.driveFieldOriented(new ChassisSpeeds(
+        (Math.abs(target.getPitch()) > tolerance) ? pidX.calculate(target.getPitch(), Constants.Vision.OPTIMAL_SHOOTER_DISTANCE) : 0.0,
+        MathUtil.applyDeadband(-joy.getRawX(), OperatorConstants.X_DEADBAND),
+        (Math.abs(target.getYaw()) > tolerance) ? pidZ.calculate(target.getYaw(), 0) : 0.0
       ));
+      
+      SmartDashboard.putNumber("Angle from Area: ", Vision.getAngleFromArea(target.getArea()));
 
-      SmartDashboard.putNumber("Distance", target.getArea());
-    }
-  }
-
-  public double getPidDistanceValue(double area) {
-    if (area > Constants.Shooter.MAX_RANGE_AREA) {
-      return pidY.calculate(distance, Constants.Shooter.MAX_RANGE_AREA - 0.5);
-    } else {
-      safeDistance = true;
-
-      return 0.0;
+      } else{
+      drive.driveFieldOriented(new ChassisSpeeds(
+        MathUtil.applyDeadband(-joy.getRawY(), OperatorConstants.Y_DEADBAND),
+        MathUtil.applyDeadband(-joy.getRawX(), OperatorConstants.X_DEADBAND),
+        MathUtil.applyDeadband(-joy.getRawZ(), OperatorConstants.Z_DEADBAND)
+      ));
     }
   }
 
@@ -84,6 +81,6 @@ public class AutoAimShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidZ.atSetpoint() && safeDistance;
+    return false;
   }
 }

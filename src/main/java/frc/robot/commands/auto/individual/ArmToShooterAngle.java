@@ -6,6 +6,7 @@ package frc.robot.commands.auto.individual;
 
 import org.photonvision.PhotonCamera;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Vision;
 import frc.robot.subsystems.ArmSubsystem;
@@ -28,7 +29,7 @@ public class ArmToShooterAngle extends Command {
       var target = results.getBestTarget();
 
       if (results.hasTargets()) {
-        arm.setAngle(Vision.getDistanceTesting(target));
+        arm.setAngle(Vision.getAngleFromArea(target.getArea()));
       }
     }   
     // Called every time the scheduler runs while the command is scheduled.

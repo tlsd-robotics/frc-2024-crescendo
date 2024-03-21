@@ -50,7 +50,7 @@ public class AimShooter extends Command {
     PhotonPipelineResult results = cam.getLatestResult();
 
     if (results.hasTargets()){   
-      PhotonTrackedTarget target = results.getBestTarget();
+      PhotonTrackedTarget target = Vision.filterResults(results);
       
       drive.driveFieldOriented(new ChassisSpeeds(
         MathUtil.applyDeadband(-joy.getRawY(), OperatorConstants.Y_DEADBAND),
@@ -58,8 +58,7 @@ public class AimShooter extends Command {
         pidZ.calculate(target.getYaw(), 0)
       ));
       
-      SmartDashboard.putNumber("Distance To Target: ", Vision.getDistancePoseTest(target));
-      SmartDashboard.putNumber("Angle from Distance: ", Vision.getAngleFromDistance(Vision.getDistanceTesting(target)));
+      SmartDashboard.putNumber("Angle from Area: ", Vision.getAngleFromArea(target.getArea()));
 
       } else{
       drive.driveFieldOriented(new ChassisSpeeds(

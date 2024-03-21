@@ -13,38 +13,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Vision;
-import frc.robot.subsystems.IntakeShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class AutoAimShooter extends Command {
+public class AutoSetDistanceAndAimShooter extends Command {
   SwerveSubsystem drive;
-  IntakeShooterSubsystem shooter;
-  PIDController pidY, pidZ;
-  double tolerance, distance;
+  PIDController pidX, pidZ;
+  double tolerance;
   PhotonCamera cam;
-  boolean safeDistance;
 
   /** Creates a new LiningUp. */
-  public AutoAimShooter(SwerveSubsystem DriveTrain, IntakeShooterSubsystem shooter, double Tolerance) {
+  public AutoSetDistanceAndAimShooter(SwerveSubsystem DriveTrain, double Tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = DriveTrain;
     this.tolerance = Tolerance;
-    this.shooter = shooter;
 
     this.cam = Vision.shooterCam;
 
-    addRequirements(DriveTrain, shooter);
+    addRequirements(DriveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidZ = new PIDController(0.05, 0, 0);
-    pidY = new PIDController(0.05, 0, 0);
+    pidZ = new PIDController(0.075, 0, 0);
     pidZ.setTolerance(tolerance);
-    pidY.setTolerance(tolerance);
 
-    safeDistance = false;
+    pidX = new PIDController(0.075, 0, 0);
+    pidX.setTolerance(tolerance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,25 +48,15 @@ public class AutoAimShooter extends Command {
     PhotonPipelineResult results = cam.getLatestResult();
 
     if (results.hasTargets()){   
-      PhotonTrackedTarget target = results.getBestTarget();
+      PhotonTrackedTarget target = Vision.filterResults(results);
       
-      drive.drive(new ChassisSpeeds(
-        getPidDistanceValue(target.getArea()), 
+      drive.driveFieldOriented(new ChassisSpeeds(
+        (Math.abs(target.getPitch()) > tolerance) ? pidX.calculate(target.getPitch(), Constants.Vision.OPTIMAL_SHOOTER_DISTANCE) : 0.0,
         0.0,
-        pidZ.calculate(target.getYaw(), 0)
+        (Math.abs(target.getYaw()) > tolerance) ? pidZ.calculate(target.getYaw(), 0) : 0.0
       ));
-
-      SmartDashboard.putNumber("Distance", target.getArea());
-    }
-  }
-
-  public double getPidDistanceValue(double area) {
-    if (area > Constants.Shooter.MAX_RANGE_AREA) {
-      return pidY.calculate(distance, Constants.Shooter.MAX_RANGE_AREA - 0.5);
-    } else {
-      safeDistance = true;
-
-      return 0.0;
+      
+      SmartDashboard.putNumber("Angle from Area: ", Vision.getAngleFromArea(target.getArea()));
     }
   }
 
@@ -84,6 +69,6 @@ public class AutoAimShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidZ.atSetpoint() && safeDistance;
+    return pidZ.atSetpoint() && pidX.atSetpoint();
   }
 }
