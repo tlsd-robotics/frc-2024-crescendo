@@ -19,6 +19,16 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
+    Thanks for continuing to work on this. Using area % occurred to me as well, but I initally dismissed it as likely to be prone to inconsistency and noise as the target does not change size by
+    a very large amount. However, it is the least complicated way of "measuring" a distance and is worth a try. I looked at my math again (and compared it to code I wrote in the past to do the same thing)
+    and discovered I made a simple math error. I have corrected and reenabled this function. This method (doing trig on the pitch angle) seems to me like it would be less prone to noise and inconsistency 
+    (and would not suffer significantly from the partial target problem you mentioned) if it works. However the only way to know which is better is to test both and see which is more consistent, 
+    which I may have to do if I get the chance.
+
+    - Nolan
+ */
+
+/*
 
     Hello from the past. I have realized I may have been over complicating the entire thing. 
 
@@ -108,9 +118,9 @@ public  class Vision {
     //     return PhotonUtils.getDistanceToPose(cameraPose, aprilTagFieldLayout.getTagPose(target.getFiducialId()).get().toPose2d());
     // }
 
-    // public static double getDistanceTesting(PhotonTrackedTarget target) {
-    //     return (1/(57.125 - 6)) * (Math.tan(Units.degreesToRadians(target.getPitch()) + Units.degreesToRadians(15)));
-    // }
+    public static double getDistanceTan(PhotonTrackedTarget target) {
+        return (57.125 - 6) / Math.tan(Units.degreesToRadians(target.getPitch()) + Units.degreesToRadians(15));
+    }
 
     //======================== Calculate Distance from Target ===========================
     // public static double getDistanceFromTarget(PhotonTrackedTarget target) {
