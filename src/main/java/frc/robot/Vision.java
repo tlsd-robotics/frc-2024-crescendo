@@ -40,9 +40,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     But based on what we were seeing today, I do not think that will cause a noticable issue. 
 
     And since you said the arm movement will be independant of the targeting buttons, it doesn't make much sense to keep the "distance" gathering code in the command anymore.
-    Regardless, Imma keep it there so I can get up the area based junk so you can just copy paste it into the arm commands if you want to try it out.
+    Regardless, Imma keep it there so I can setup the area based junk so you can just copy paste it into the arm commands if you want to try it out.
 
-    And aparently I mocked up a ArmToShooterAngle command already in the auto/individual/ folder so you can use that and just change stuff around. 
+    And aparently I had mocked up a ArmToShooterAngle command already in the auto/individual/ folder so you can use that and just change stuff around. 
 
     Changes that will be made:
 
