@@ -2,19 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.47804534318746067,
-      "y": 2.2376953141003058
+      "x": 1.3122157857218941,
+      "y": 4.170852212672167
     },
-    "rotation": 0
+    "rotation": -51.74557964748279
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "AutoShootSequence"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Source Side Leave Path"
+            "pathName": "Source Side Close Leave Path"
           }
         }
       ]
